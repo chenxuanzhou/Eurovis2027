@@ -1,0 +1,288 @@
+"""Derive the cycle-level data products from the raw voraus-AD parquet (100 Hz).
+
+Needs data/raw/voraus-ad-dataset-100hz.parquet (or VORAUS_PARQUET=<path>).
+
+Outputs
+  data/cycles/cycles.parquet               one row per cycle (2122): labels, setting, official split,
+                                           duration, sampling, leave-setting-out membership
+  data/cycles/action_segments.parquet      one row per (cycle, action): start/end time and progress
+  data/envelope/normal_envelope_grid500.parquet
+                                           per channel (all 130) x 500 progress points: mean, std,
+                                           scale (the SAFEPROCESS z denominator), q05/q25/q50/q75/q95,
+                                           over the 948 official training cycles (setting PRE_A)
+  data/envelope/normal_phase_grid500.csv   modal action per progress point over the training cycles
+  data/signals/grid500/<part>.parquet      the 1174 test cycles (one part per anomaly category plus
+                                           normal_test) and a fixed sample of 100 training cycles,
+                                           resampled onto the 500-point progress grid for the channels
+                                           in config.grid_channels(), plus the action code per point
+  data/signals/grid500/manifest.json       parts, cycles per part, channels, precision
+  data/evidence/records_normal_test.json   evidence records (schema 0.3) for the 419 test cycles
+                                           without an anomaly, built exactly like the anomalous ones
+  data/evidence/regeneration_check.json    the 755 anomalous records rebuilt from raw and compared with
+                                           the copied SAFEPROCESS records
+
+Resampling follows attribution_bridge._resample: time is normalized per cycle to [0, 1]
+and every channel is linearly interpolated onto np.linspace(0, 1, 500).
+
+Run from the repository root:  python pipeline/build_from_raw.py
+"""
+from __future__ import annotations
+
+import json
+import time
+
+import numpy as np
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+import config as C  # noqa: I001  (puts pipeline/vendor on sys.path)
+import attribution_bridge as AB
+from voraus_enums import Signals
+
+EPS = AB.EPS
+META = ["time", "sample", "anomaly", "category", "setting", "action", "active"]
+KB_CHANNELS = [f"{f}_{j}" for f in AB.JOINT_SIGNALS for j in AB.JOINTS] + list(AB.ROBOT_SIGNALS)
+QUANTILES = (0.05, 0.25, 0.5, 0.75, 0.95)
+
+
+def log(msg: str) -> None:
+    print(time.strftime("%H:%M:%S"), msg, flush=True)
+
+
+def read(columns: list[str], filters=None, float32: bool = True) -> pd.DataFrame:
+    table = pq.read_table(C.RAW_PARQUET, columns=columns, filters=filters)
+    df = table.to_pandas()
+    for c in df.columns:
+        if c == "time":
+            df[c] = df[c].astype(np.float64)
+        elif float32 and df[c].dtype == np.float64:
+            df[c] = df[c].astype(np.float32)
+    return df.sort_values(["sample", "time"], kind="stable").reset_index(drop=True)
+
+
+def cycle_slices(df: pd.DataFrame) -> list[tuple[int, int, int]]:
+    s = df["sample"].to_numpy()
+    starts = np.flatnonzero(np.r_[True, s[1:] != s[:-1]])
+    ends = np.r_[starts[1:], len(s)]
+    return [(int(s[a]), int(a), int(b)) for a, b in zip(starts, ends)]
+
+
+def progress(t: np.ndarray) -> np.ndarray:
+    return (t - t.min()) / (t.max() - t.min() + EPS)
+
+
+def resample_block(df: pd.DataFrame, a: int, b: int, cols: list[str], grid: np.ndarray,
+                   dtype=np.float32) -> np.ndarray:
+    tn = progress(df["time"].to_numpy()[a:b])
+    return np.vstack([np.interp(grid, tn, df[c].to_numpy()[a:b].astype(np.float64)) for c in cols]).astype(dtype)
+
+
+def action_on_grid(df: pd.DataFrame, a: int, b: int, grid: np.ndarray) -> np.ndarray:
+    tn = progress(df["time"].to_numpy()[a:b])
+    act = df["action"].to_numpy()[a:b]
+    return act[np.searchsorted(tn, grid, side="right") - 1].astype(np.int8)
+
+
+# ---------------------------------------------------------------------------
+def build_cycles(meta: pd.DataFrame) -> pd.DataFrame:
+    lso = json.loads((C.DATA / "splits" / "leave_setting_out.json").read_text(encoding="utf-8"))
+    rows, segs = [], []
+    for sid, a, b in cycle_slices(meta):
+        run = meta.iloc[a:b]
+        for col in ("anomaly", "category", "setting"):
+            if run[col].nunique() != 1:
+                raise ValueError(f"cycle {sid}: {col} not constant")
+        t = run["time"].to_numpy()
+        tn = progress(t)
+        dt = np.diff(t)
+        row = {
+            "sample": sid, "category": int(run["category"].iat[0]),
+            "setting": int(run["setting"].iat[0]), "anomaly": bool(run["anomaly"].iat[0]),
+            "n_rows": int(b - a), "t_start": float(t.min()), "duration_s": float(t.max() - t.min()),
+            "dt_median_s": float(np.median(dt)) if len(dt) else np.nan,
+            "active_fraction": float(run["active"].astype(float).mean()),
+            "n_actions": int(run["action"].nunique()),
+        }
+        row["official_split"] = "train" if row["setting"] == C.TRAIN_SETTING else "test"
+        for seed, s in lso["seeds"].items():
+            row[f"lso{seed}"] = ("fit" if sid in set(s["fit_cycles"])
+                                 else "test" if sid in set(s["test_cycles"]) else None)
+        rows.append(row)
+        act = run["action"].to_numpy()
+        change = np.flatnonzero(np.r_[True, act[1:] != act[:-1]])
+        stop = np.r_[change[1:], len(act)]
+        for k, (p, q) in enumerate(zip(change, stop)):
+            segs.append({"sample": sid, "segment": k, "action": int(act[p]),
+                         "t_start": float(t[p] - t.min()), "t_end": float(t[q - 1] - t.min()),
+                         "progress_start": float(tn[p]), "progress_end": float(tn[q - 1]),
+                         "n_rows": int(q - p)})
+    cycles = pd.DataFrame(rows)
+    out = C.DATA / "cycles"
+    out.mkdir(parents=True, exist_ok=True)
+    cycles.to_parquet(out / "cycles.parquet", index=False, compression="zstd")
+    cycles.to_csv(out / "cycles.csv", index=False)
+    pd.DataFrame(segs).to_parquet(out / "action_segments.parquet", index=False, compression="zstd")
+    log(f"cycles: {len(cycles)} rows, segments: {len(segs)}")
+    return cycles
+
+
+def build_envelope(grid: np.ndarray) -> dict:
+    cols = list(Signals.machine())
+    df = read(["time", "sample", "setting", "action"] + cols, filters=[("setting", "=", C.TRAIN_SETTING)],
+              float32=False)
+    sl = cycle_slices(df)
+    stack = np.stack([resample_block(df, a, b, cols, grid, np.float64) for _, a, b in sl])  # (n, ch, grid)
+    acts = np.stack([action_on_grid(df, a, b, grid) for _, a, b in sl])          # (n, grid)
+    mean, std = stack.mean(axis=0), stack.std(axis=0)
+    ptp = np.ptp(mean, axis=1, keepdims=True)
+    scale = np.maximum(std, 0.05 * np.where(ptp > 0, ptp, 1.0))
+    qs = np.quantile(stack, QUANTILES, axis=0)
+    n_ch, n_g = mean.shape
+    f32 = lambda a: a.ravel().astype(np.float32)
+    env = pd.DataFrame({
+        "channel": np.repeat(cols, n_g), "grid_idx": np.tile(np.arange(n_g, dtype=np.int16), n_ch),
+        "progress": np.tile(grid.astype(np.float32), n_ch),
+        "mean": f32(mean), "std": f32(std), "scale": f32(scale),
+        **{f"q{int(q * 100):02d}": f32(qs[k]) for k, q in enumerate(QUANTILES)},
+    })
+    out = C.DATA / "envelope"
+    out.mkdir(parents=True, exist_ok=True)
+    pq.write_table(pa.Table.from_pandas(env, preserve_index=False), out / "normal_envelope_grid500.parquet",
+                   compression="zstd", compression_level=19, use_dictionary=["channel"],
+                   use_byte_stream_split=[c for c in env.columns if env[c].dtype == np.float32])
+    modal = np.array([np.bincount(acts[:, g], minlength=15).argmax() for g in range(n_g)])
+    frac = np.array([(acts[:, g] == modal[g]).mean() for g in range(n_g)])
+    pd.DataFrame({"grid_idx": np.arange(n_g), "progress": grid, "modal_action": modal,
+                  "modal_fraction": frac.round(4)}).to_csv(out / "normal_phase_grid500.csv", index=False)
+    log(f"envelope: {len(sl)} training cycles x {n_ch} channels")
+    idx = {c: k for k, c in enumerate(cols)}
+    del stack
+    return {c: {"mean": mean[idx[c]], "scale": scale[idx[c]]} for c in KB_CHANNELS}
+
+
+def trim_mantissa(x: np.ndarray, keep_bits: int = C.GRID_KEEP_MANTISSA_BITS) -> np.ndarray:
+    """Round float32 values to `keep_bits` mantissa bits (relative error <= 2**-(keep_bits+1)).
+
+    The dropped low bits become zero, which byte_stream_split + zstd compress to almost
+    nothing, so the files shrink to roughly float16 size while staying plain float32 for
+    every reader (pandas, DuckDB, Arrow JS).
+    """
+    drop = 23 - keep_bits
+    bits = np.ascontiguousarray(x, dtype=np.float32).view(np.uint32)
+    rounded = (bits + np.uint32(1 << (drop - 1))) & np.uint32((0xFFFFFFFF << drop) & 0xFFFFFFFF)
+    return rounded.view(np.float32)
+
+
+def write_part(frames: list[pd.DataFrame], name: str, schema_cols: list[str]) -> dict:
+    out = C.DATA / "signals" / "grid500"
+    out.mkdir(parents=True, exist_ok=True)
+    table = pa.Table.from_pandas(pd.concat(frames, ignore_index=True), preserve_index=False)
+    path = out / f"{name}.parquet"
+    # dictionary encoding would block byte_stream_split and triples the size of float columns
+    pq.write_table(table, path, compression="zstd", compression_level=19, use_dictionary=False,
+                   use_byte_stream_split=schema_cols, row_group_size=50_000)
+    mb = path.stat().st_size / 2**20
+    if mb > C.MAX_FILE_MB:
+        raise RuntimeError(f"{path.name} is {mb:.1f} MB > {C.MAX_FILE_MB} MB; split the part further")
+    log(f"  {path.name}: {mb:.1f} MB")
+    return {"file": path.name, "megabytes": round(mb, 2)}
+
+
+def build_grid_signals(cycles: pd.DataFrame, grid: np.ndarray) -> None:
+    cols = C.grid_channels()
+    df = read(["time", "sample", "action"] + cols, float32=False)
+    sl = {sid: (a, b) for sid, a, b in cycle_slices(df)}
+    parts: dict[str, list[int]] = {}
+    for r in cycles.itertuples():
+        if r.anomaly:
+            key = f"anomalous_cat{r.category:02d}"
+        elif r.official_split == "test":
+            key = "normal_test"
+        else:
+            continue
+        parts.setdefault(key, []).append(r.sample)
+    train = sorted(cycles.loc[cycles["official_split"] == "train", "sample"])
+    rng = np.random.default_rng(C.TRAIN_SAMPLE_SEED)
+    parts["normal_train_sample"] = sorted(rng.choice(train, size=min(C.TRAIN_SAMPLE_N, len(train)),
+                                                     replace=False).tolist())
+    g = np.arange(len(grid), dtype=np.int16)
+    manifest = {"grid_n": len(grid), "channels": cols,
+                "precision": f"float32 rounded to {C.GRID_KEEP_MANTISSA_BITS} mantissa bits "
+                             f"(relative error <= {2.0 ** -(C.GRID_KEEP_MANTISSA_BITS + 1):.1e})",
+                "train_sample": {"n": len(parts["normal_train_sample"]), "seed": C.TRAIN_SAMPLE_SEED},
+                "parts": {}}
+    for name, ids in sorted(parts.items()):
+        frames = []
+        for sid in sorted(ids):
+            a, b = sl[sid]
+            m = trim_mantissa(resample_block(df, a, b, cols, grid))
+            f = pd.DataFrame(m.T, columns=cols)
+            f.insert(0, "action", action_on_grid(df, a, b, grid))
+            f.insert(0, "grid_idx", g)
+            f.insert(0, "sample", np.int32(sid))
+            frames.append(f)
+        info = write_part(frames, name, cols)
+        manifest["parts"][name] = {**info, "n_cycles": len(ids), "samples": sorted(int(i) for i in ids)}
+    (C.DATA / "signals" / "grid500" / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
+
+
+def build_records(ref: dict, cycles: pd.DataFrame, grid: np.ndarray) -> None:
+    df = read(["time", "sample", "category", "setting", "action"] + KB_CHANNELS, float32=False)
+    sl = {sid: (a, b) for sid, a, b in cycle_slices(df)}
+    test = cycles[cycles["official_split"] == "test"]
+    normal_records, rebuilt = [], {}
+    for r in test.itertuples():
+        a, b = sl[r.sample]
+        run = df.iloc[a:b]
+        rec = AB.to_bridge_record(AB.attribute(run, ref, grid), sample_id=r.sample,
+                                  category=r.category, setting=r.setting)
+        rec.pop("_notes", None)
+        if r.anomaly:
+            rebuilt[r.sample] = rec
+        else:
+            rec["detector"]["verdict"] = "normal (ground truth; no detector score yet)"
+            normal_records.append(rec)
+    ev = C.DATA / "evidence"
+    (ev / "records_normal_test.json").write_text(json.dumps(normal_records), encoding="utf-8")
+    cached = {r["cycle_id"]: r for r in json.loads((ev / "records_anomalous.json").read_text(encoding="utf-8"))}
+    diffs = []
+    for cid, old in cached.items():
+        new = rebuilt.get(cid)
+        if new is None:
+            diffs.append({"cycle_id": cid, "issue": "missing in raw"})
+            continue
+        so, sn = old["signature"]["slots"], new["signature"]["slots"]
+        worst = max(abs(x - y) for k in so for x, y in zip(so[k], sn.get(k, [np.nan] * 5)))
+        same_top = [s["signal"] for s in old["attributed_signals"]] == [s["signal"] for s in new["attributed_signals"]]
+        diffs.append({"cycle_id": cid, "max_abs_slot_diff": round(float(worst), 4), "same_top5": same_top})
+    d = pd.DataFrame(diffs)
+    summary = {
+        "n_cached": len(cached), "n_rebuilt": len(rebuilt),
+        "max_abs_slot_diff": float(d["max_abs_slot_diff"].max()),
+        "share_same_top5": float(d["same_top5"].mean()),
+        "note": "slot values are rounded to 3 decimals in the records, so diffs up to 0.0005 are rounding",
+        "per_cycle": diffs,
+    }
+    (ev / "regeneration_check.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    log(f"records: {len(normal_records)} normal test; anomalous rebuilt max slot diff "
+        f"{summary['max_abs_slot_diff']:.4f}, same top-5 {summary['share_same_top5']:.3f}")
+
+
+def main() -> None:
+    if not C.RAW_PARQUET.exists():
+        raise SystemExit(f"raw parquet not found: {C.RAW_PARQUET} (see data/raw/README.md)")
+    grid = np.linspace(0, 1, C.GRID_N)
+    log("reading meta columns")
+    cycles = build_cycles(read(META))
+    log("normal envelope")
+    ref = build_envelope(grid)
+    log("grid500 signals")
+    build_grid_signals(cycles, grid)
+    log("evidence records")
+    build_records(ref, cycles, grid)
+    log("done")
+
+
+if __name__ == "__main__":
+    main()

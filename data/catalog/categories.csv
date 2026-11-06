@@ -1,0 +1,14 @@
+category,enum_name,paper_name,paper_group,anomaly,kb_mode,kb_mode_name,kb_group
+0,AXIS_FRICTION,additional friction,robot axis wear,True,FM_friction,Additional axis friction,axis wear
+1,AXIS_WEIGHT,additional axis weight,process error,True,FM_axisweight,Additional axis weight,process error
+2,COLLISION_FOAM,collision with foam,process error,True,FM_collision_foam,Collision with foam,process error
+3,COLLISION_CABLE,collision with cables,process error,True,FM_collision_cable,Collision with cables,process error
+4,COLLISION_CARTON,collision with cardboard,process error,True,FM_collision_card,Collision with cardboard,process error
+5,MISS_CAN,misgrip of can,gripping error,True,FM_misgrip,Misgrip of can,gripping error
+6,LOSE_CAN,losing the can,gripping error,True,FM_losecan,Losing the can mid-transfer,gripping error
+7,CAN_WEIGHT,varying can weight,process error,True,FM_varweight,Varying can weight,process error
+8,ENTANGLED,cable routed at robot,process error,True,FM_cable_routed,Cable routed at robot,process error
+9,INVALID_POSITION,invalid gripping position,process error,True,FM_invalidgrip,Invalid gripping position,process error
+10,MOTOR_COMMUTATION,miscommutation,robot axis wear,True,FM_miscommutation,Motor miscommutation,axis wear
+11,WOBBLING_STATION,unstable platform,process error,True,FM_platform,Unstable platform,process error
+12,NORMAL_OPERATION,normal operation,normal,False,,,

@@ -1,0 +1,160 @@
+[
+ {
+  "members": [
+   "FM_misgrip",
+   "FM_invalidgrip"
+  ],
+  "categories": [
+   5,
+   9
+  ],
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "families": [
+   "joint_position",
+   "torque_sensor_a"
+  ],
+  "phase_hints": {
+   "FM_misgrip": "grip",
+   "FM_invalidgrip": "grip"
+  },
+  "resolution_kind": "inspection",
+  "hint_zh": "抓取失败模式（漏抓 vs 示教点位置错）——需抓取位姿复核",
+  "hint_en": "How the grip failed (missed can vs wrong taught position); needs a check of the grip pose.",
+  "certificate": {
+   "key": "invalidgrip+misgrip",
+   "adopted": false,
+   "verdict": "undetermined",
+   "acc_test": null,
+   "acc_majority": null,
+   "acc_deployed_repr": null,
+   "dims_selected": null,
+   "cost_class": null,
+   "reason": "too few instantiations of this cluster's members on one side of a leave-setting-out split"
+  },
+  "untestable_reason": null
+ },
+ {
+  "members": [
+   "FM_collision_foam",
+   "FM_collision_card"
+  ],
+  "categories": [
+   2,
+   4
+  ],
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "families": [
+   "joint_velocity",
+   "motor_torque"
+  ],
+  "phase_hints": {
+   "FM_collision_foam": "transfer",
+   "FM_collision_card": "transfer"
+  },
+  "resolution_kind": "inspection",
+  "hint_zh": "接触物材质（泡沫 vs 纸板）——信号无法区分，需现场目视/视频",
+  "hint_en": "Material of the contacted object (foam vs cardboard); the signals cannot separate them, needs an on-site look or video.",
+  "certificate": {
+   "key": "collision_card+collision_foam",
+   "adopted": false,
+   "verdict": "inconclusive",
+   "acc_test": 0.7759282440026194,
+   "acc_majority": 0.7183979956731775,
+   "acc_deployed_repr": 0.7093330281929173,
+   "dims_selected": {
+    "sign": 5,
+    "step": 5,
+    "payload": 5,
+    "shape": 5
+   },
+   "cost_class": "free",
+   "reason": null
+  },
+  "untestable_reason": null
+ },
+ {
+  "members": [
+   "FM_losecan",
+   "FM_varweight",
+   "FM_axisweight"
+  ],
+  "categories": [
+   6,
+   7,
+   1
+  ],
+  "joints": [
+   1,
+   2,
+   3
+  ],
+  "families": [
+   "motor_torque",
+   "torque_sensor_a"
+  ],
+  "phase_hints": {
+   "FM_losecan": "transfer",
+   "FM_varweight": "grip",
+   "FM_axisweight": "any"
+  },
+  "resolution_kind": "learned certificate",
+  "hint_zh": "扭矩偏差方向与跨周期一致性（掉件=骤降 / 加重=持续升高 / 变重=逐件不同）——需产线负载配置或人工判定",
+  "hint_en": "Direction and cycle-to-cycle consistency of the torque deviation (lost can = sudden drop, added weight = sustained rise, varying weight = differs between cycles); needs the line's payload configuration or a human check.",
+  "certificate": {
+   "key": "axisweight+losecan+varweight",
+   "adopted": true,
+   "verdict": "distinguishability",
+   "acc_test": 0.8402097942394168,
+   "acc_majority": 0.5041039818014947,
+   "acc_deployed_repr": 0.561503908995622,
+   "dims_selected": {
+    "sign": 4,
+    "step": 3,
+    "unread": 2,
+    "shape": 2
+   },
+   "cost_class": "pipeline",
+   "reason": null
+  },
+  "untestable_reason": null
+ },
+ {
+  "members": [
+   "FM_overtemp",
+   "FM_miscommutation"
+  ],
+  "categories": [
+   null,
+   10
+  ],
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "families": [
+   "motor_torque",
+   "robot_current"
+  ],
+  "phase_hints": {
+   "FM_overtemp": "any",
+   "FM_miscommutation": "any"
+  },
+  "resolution_kind": "sensor gap",
+  "hint_zh": "电气 vs 热因——本机无温度传感器，属传感器缺口",
+  "hint_en": "Electrical vs thermal cause; the cell has no temperature sensor, so this is a sensor gap.",
+  "certificate": null,
+  "untestable_reason": "temperature channel (absent from the cell) — hardware instrumentation, untestable here"
+ }
+]

@@ -1,0 +1,130 @@
+{
+ "source": {
+  "repository": "chenxuanzhou/Structural-Non-Isolability-in-Knowledge-Based-Robot-Fault-Diagnosis",
+  "commit": "438389f10b034c3b215750b9fd4ca734d72b106c",
+  "file": "results/repair_results.json"
+ },
+ "protocol": "five leave-setting-out splits (data/splits/leave_setting_out.json)",
+ "certificates": {
+  "invalidgrip+misgrip": {
+   "members": [
+    "FM_invalidgrip",
+    "FM_misgrip"
+   ],
+   "adopted": false,
+   "verdict": "undetermined",
+   "reason": "too few instantiations of this cluster's members on one side of a leave-setting-out split"
+  },
+  "axisweight+losecan+varweight": {
+   "members": [
+    "FM_axisweight",
+    "FM_losecan",
+    "FM_varweight"
+   ],
+   "n_fit": 158,
+   "n_test": 152,
+   "acc_test": 0.8402097942394168,
+   "acc_deployed_repr": 0.561503908995622,
+   "acc_majority": 0.5041039818014947,
+   "acc_permuted": 0.4305279016254673,
+   "dims_selected": {
+    "sign": 4,
+    "step": 3,
+    "unread": 2,
+    "shape": 2
+   },
+   "cost_class": "pipeline",
+   "cost_class_spread": {
+    "pipeline": 2,
+    "free": 3
+   },
+   "search_validated_seeds": "5/5",
+   "adopted_seeds": "5/5",
+   "adopted": true,
+   "wall": "distinguishability"
+  },
+  "collision_card+collision_foam": {
+   "members": [
+    "FM_collision_card",
+    "FM_collision_foam"
+   ],
+   "n_fit": 37,
+   "n_test": 57,
+   "acc_test": 0.7759282440026194,
+   "acc_deployed_repr": 0.7093330281929173,
+   "acc_majority": 0.7183979956731775,
+   "acc_permuted": 0.6083989042373374,
+   "dims_selected": {
+    "sign": 5,
+    "step": 5,
+    "payload": 5,
+    "shape": 5
+   },
+   "cost_class": "free",
+   "cost_class_spread": {
+    "free": 5
+   },
+   "search_validated_seeds": "0/5",
+   "adopted_seeds": "0/5",
+   "adopted": false,
+   "wall": "inconclusive"
+  }
+ },
+ "untestable": [
+  {
+   "members": [
+    "FM_miscommutation",
+    "FM_overtemp"
+   ],
+   "reason": "temperature channel (absent from the cell) — hardware instrumentation, untestable here"
+  }
+ ],
+ "leave_setting_out_vs_random": {
+  "axisweight+losecan+varweight": {
+   "random": {
+    "acc": 0.9329032258064517,
+    "adopted": true
+   },
+   "leave_setting_out": {
+    "acc": 0.8402097942394168,
+    "adopted": true
+   }
+  },
+  "collision_card+collision_foam": {
+   "random": {
+    "acc": 0.8297872340425532,
+    "adopted": true
+   },
+   "leave_setting_out": {
+    "acc": 0.7759282440026194,
+    "adopted": false
+   }
+  }
+ },
+ "label_efficiency": {
+  "axisweight+losecan+varweight": {
+   "5": 0.4862655848011083,
+   "10": 0.6004109943372185,
+   "20": 0.695929376677395,
+   "40": 0.7553642789935456,
+   "80": 0.7775912173070713
+  }
+ },
+ "flat_classifier_control": {
+  "top1": 0.5253113112760478,
+  "per_category": {
+   "0": 0.5804359994108116,
+   "1": 0.8788821548821548,
+   "2": 0.5059597503243203,
+   "3": 0.3875,
+   "4": 0.18705128205128205,
+   "5": 0.0,
+   "6": 0.6414470242738494,
+   "7": 0.35564482029598304,
+   "9": 0.0,
+   "10": 0.45848742138364784,
+   "11": 0.19966176470588234,
+   "8": 0.0
+  }
+ }
+}

@@ -1,0 +1,131 @@
+column_order,name,family,joint,level,source,domain,read_by_kb,in_grid500,unit,unit_source
+0,robot_voltage,robot_voltage,,robot,measured,electrical,False,False,V,inferred from name
+1,robot_current,robot_current,,robot,measured,electrical,True,True,A,inferred from name
+2,io_current,io_current,,robot,measured,electrical,False,False,A,inferred from name
+3,system_current,system_current,,robot,measured,electrical,True,True,A,inferred from name
+4,target_position_1,target_position,1,joint,computed,mechanical,False,False,rad,inferred from name
+5,target_velocity_1,target_velocity,1,joint,computed,mechanical,False,False,rad/s,inferred from name
+6,target_acceleration_1,target_acceleration,1,joint,computed,mechanical,False,False,rad/s²,inferred from name
+7,target_torque_1,target_torque,1,joint,computed,mechanical,False,True,N·m,inferred from name
+8,computed_inertia_1,computed_inertia,1,joint,computed,mechanical,False,False,kg·m²,inferred from name
+9,computed_torque_1,computed_torque,1,joint,computed,mechanical,False,False,N·m,inferred from name
+10,motor_position_1,motor_position,1,joint,measured,mechanical,False,False,rad,inferred from name
+11,motor_velocity_1,motor_velocity,1,joint,measured,mechanical,False,False,rad/s,inferred from name
+12,joint_position_1,joint_position,1,joint,measured,mechanical,True,True,rad,attribution_bridge label
+13,joint_velocity_1,joint_velocity,1,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+14,motor_torque_1,motor_torque,1,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+15,torque_sensor_a_1,torque_sensor_a,1,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+16,torque_sensor_b_1,torque_sensor_b,1,joint,measured,mechanical,False,False,N·m,inferred from name
+17,motor_iq_1,motor_iq,1,joint,computed,electrical,False,True,A,inferred from name
+18,motor_id_1,motor_id,1,joint,computed,electrical,False,False,A,inferred from name
+19,power_motor_el_1,power_motor_el,1,joint,computed,electrical,False,False,W,inferred from name
+20,power_motor_mech_1,power_motor_mech,1,joint,computed,mechanical,False,False,W,inferred from name
+21,power_load_mech_1,power_load_mech,1,joint,computed,mechanical,False,True,W,inferred from name
+22,motor_voltage_1,motor_voltage,1,joint,measured,electrical,False,False,V,inferred from name
+23,supply_voltage_1,supply_voltage,1,joint,measured,electrical,False,False,V,inferred from name
+24,brake_voltage_1,brake_voltage,1,joint,measured,electrical,False,False,V,inferred from name
+25,target_position_2,target_position,2,joint,computed,mechanical,False,False,rad,inferred from name
+26,target_velocity_2,target_velocity,2,joint,computed,mechanical,False,False,rad/s,inferred from name
+27,target_acceleration_2,target_acceleration,2,joint,computed,mechanical,False,False,rad/s²,inferred from name
+28,target_torque_2,target_torque,2,joint,computed,mechanical,False,True,N·m,inferred from name
+29,computed_inertia_2,computed_inertia,2,joint,computed,mechanical,False,False,kg·m²,inferred from name
+30,computed_torque_2,computed_torque,2,joint,computed,mechanical,False,False,N·m,inferred from name
+31,motor_position_2,motor_position,2,joint,measured,mechanical,False,False,rad,inferred from name
+32,motor_velocity_2,motor_velocity,2,joint,measured,mechanical,False,False,rad/s,inferred from name
+33,joint_position_2,joint_position,2,joint,measured,mechanical,True,True,rad,attribution_bridge label
+34,joint_velocity_2,joint_velocity,2,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+35,motor_torque_2,motor_torque,2,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+36,torque_sensor_a_2,torque_sensor_a,2,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+37,torque_sensor_b_2,torque_sensor_b,2,joint,measured,mechanical,False,False,N·m,inferred from name
+38,motor_iq_2,motor_iq,2,joint,computed,electrical,False,True,A,inferred from name
+39,motor_id_2,motor_id,2,joint,computed,electrical,False,False,A,inferred from name
+40,power_motor_el_2,power_motor_el,2,joint,computed,electrical,False,False,W,inferred from name
+41,power_motor_mech_2,power_motor_mech,2,joint,computed,mechanical,False,False,W,inferred from name
+42,power_load_mech_2,power_load_mech,2,joint,computed,mechanical,False,True,W,inferred from name
+43,motor_voltage_2,motor_voltage,2,joint,measured,electrical,False,False,V,inferred from name
+44,supply_voltage_2,supply_voltage,2,joint,measured,electrical,False,False,V,inferred from name
+45,brake_voltage_2,brake_voltage,2,joint,measured,electrical,False,False,V,inferred from name
+46,target_position_3,target_position,3,joint,computed,mechanical,False,False,rad,inferred from name
+47,target_velocity_3,target_velocity,3,joint,computed,mechanical,False,False,rad/s,inferred from name
+48,target_acceleration_3,target_acceleration,3,joint,computed,mechanical,False,False,rad/s²,inferred from name
+49,target_torque_3,target_torque,3,joint,computed,mechanical,False,True,N·m,inferred from name
+50,computed_inertia_3,computed_inertia,3,joint,computed,mechanical,False,False,kg·m²,inferred from name
+51,computed_torque_3,computed_torque,3,joint,computed,mechanical,False,False,N·m,inferred from name
+52,motor_position_3,motor_position,3,joint,measured,mechanical,False,False,rad,inferred from name
+53,motor_velocity_3,motor_velocity,3,joint,measured,mechanical,False,False,rad/s,inferred from name
+54,joint_position_3,joint_position,3,joint,measured,mechanical,True,True,rad,attribution_bridge label
+55,joint_velocity_3,joint_velocity,3,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+56,motor_torque_3,motor_torque,3,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+57,torque_sensor_a_3,torque_sensor_a,3,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+58,torque_sensor_b_3,torque_sensor_b,3,joint,measured,mechanical,False,False,N·m,inferred from name
+59,motor_iq_3,motor_iq,3,joint,computed,electrical,False,True,A,inferred from name
+60,motor_id_3,motor_id,3,joint,computed,electrical,False,False,A,inferred from name
+61,power_motor_el_3,power_motor_el,3,joint,computed,electrical,False,False,W,inferred from name
+62,power_motor_mech_3,power_motor_mech,3,joint,computed,mechanical,False,False,W,inferred from name
+63,power_load_mech_3,power_load_mech,3,joint,computed,mechanical,False,True,W,inferred from name
+64,motor_voltage_3,motor_voltage,3,joint,measured,electrical,False,False,V,inferred from name
+65,supply_voltage_3,supply_voltage,3,joint,measured,electrical,False,False,V,inferred from name
+66,brake_voltage_3,brake_voltage,3,joint,measured,electrical,False,False,V,inferred from name
+67,target_position_4,target_position,4,joint,computed,mechanical,False,False,rad,inferred from name
+68,target_velocity_4,target_velocity,4,joint,computed,mechanical,False,False,rad/s,inferred from name
+69,target_acceleration_4,target_acceleration,4,joint,computed,mechanical,False,False,rad/s²,inferred from name
+70,target_torque_4,target_torque,4,joint,computed,mechanical,False,True,N·m,inferred from name
+71,computed_inertia_4,computed_inertia,4,joint,computed,mechanical,False,False,kg·m²,inferred from name
+72,computed_torque_4,computed_torque,4,joint,computed,mechanical,False,False,N·m,inferred from name
+73,motor_position_4,motor_position,4,joint,measured,mechanical,False,False,rad,inferred from name
+74,motor_velocity_4,motor_velocity,4,joint,measured,mechanical,False,False,rad/s,inferred from name
+75,joint_position_4,joint_position,4,joint,measured,mechanical,True,True,rad,attribution_bridge label
+76,joint_velocity_4,joint_velocity,4,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+77,motor_torque_4,motor_torque,4,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+78,torque_sensor_a_4,torque_sensor_a,4,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+79,torque_sensor_b_4,torque_sensor_b,4,joint,measured,mechanical,False,False,N·m,inferred from name
+80,motor_iq_4,motor_iq,4,joint,computed,electrical,False,True,A,inferred from name
+81,motor_id_4,motor_id,4,joint,computed,electrical,False,False,A,inferred from name
+82,power_motor_el_4,power_motor_el,4,joint,computed,electrical,False,False,W,inferred from name
+83,power_motor_mech_4,power_motor_mech,4,joint,computed,mechanical,False,False,W,inferred from name
+84,power_load_mech_4,power_load_mech,4,joint,computed,mechanical,False,True,W,inferred from name
+85,motor_voltage_4,motor_voltage,4,joint,measured,electrical,False,False,V,inferred from name
+86,supply_voltage_4,supply_voltage,4,joint,measured,electrical,False,False,V,inferred from name
+87,brake_voltage_4,brake_voltage,4,joint,measured,electrical,False,False,V,inferred from name
+88,target_position_5,target_position,5,joint,computed,mechanical,False,False,rad,inferred from name
+89,target_velocity_5,target_velocity,5,joint,computed,mechanical,False,False,rad/s,inferred from name
+90,target_acceleration_5,target_acceleration,5,joint,computed,mechanical,False,False,rad/s²,inferred from name
+91,target_torque_5,target_torque,5,joint,computed,mechanical,False,True,N·m,inferred from name
+92,computed_inertia_5,computed_inertia,5,joint,computed,mechanical,False,False,kg·m²,inferred from name
+93,computed_torque_5,computed_torque,5,joint,computed,mechanical,False,False,N·m,inferred from name
+94,motor_position_5,motor_position,5,joint,measured,mechanical,False,False,rad,inferred from name
+95,motor_velocity_5,motor_velocity,5,joint,measured,mechanical,False,False,rad/s,inferred from name
+96,joint_position_5,joint_position,5,joint,measured,mechanical,True,True,rad,attribution_bridge label
+97,joint_velocity_5,joint_velocity,5,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+98,motor_torque_5,motor_torque,5,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+99,torque_sensor_a_5,torque_sensor_a,5,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+100,torque_sensor_b_5,torque_sensor_b,5,joint,measured,mechanical,False,False,N·m,inferred from name
+101,motor_iq_5,motor_iq,5,joint,computed,electrical,False,True,A,inferred from name
+102,motor_id_5,motor_id,5,joint,computed,electrical,False,False,A,inferred from name
+103,power_motor_el_5,power_motor_el,5,joint,computed,electrical,False,False,W,inferred from name
+104,power_motor_mech_5,power_motor_mech,5,joint,computed,mechanical,False,False,W,inferred from name
+105,power_load_mech_5,power_load_mech,5,joint,computed,mechanical,False,True,W,inferred from name
+106,motor_voltage_5,motor_voltage,5,joint,measured,electrical,False,False,V,inferred from name
+107,supply_voltage_5,supply_voltage,5,joint,measured,electrical,False,False,V,inferred from name
+108,brake_voltage_5,brake_voltage,5,joint,measured,electrical,False,False,V,inferred from name
+109,target_position_6,target_position,6,joint,computed,mechanical,False,False,rad,inferred from name
+110,target_velocity_6,target_velocity,6,joint,computed,mechanical,False,False,rad/s,inferred from name
+111,target_acceleration_6,target_acceleration,6,joint,computed,mechanical,False,False,rad/s²,inferred from name
+112,target_torque_6,target_torque,6,joint,computed,mechanical,False,True,N·m,inferred from name
+113,computed_inertia_6,computed_inertia,6,joint,computed,mechanical,False,False,kg·m²,inferred from name
+114,computed_torque_6,computed_torque,6,joint,computed,mechanical,False,False,N·m,inferred from name
+115,motor_position_6,motor_position,6,joint,measured,mechanical,False,False,rad,inferred from name
+116,motor_velocity_6,motor_velocity,6,joint,measured,mechanical,False,False,rad/s,inferred from name
+117,joint_position_6,joint_position,6,joint,measured,mechanical,True,True,rad,attribution_bridge label
+118,joint_velocity_6,joint_velocity,6,joint,measured,mechanical,True,True,rad/s,attribution_bridge label
+119,motor_torque_6,motor_torque,6,joint,computed,mechanical,True,True,N·m,attribution_bridge label
+120,torque_sensor_a_6,torque_sensor_a,6,joint,measured,mechanical,True,True,N·m,attribution_bridge label
+121,torque_sensor_b_6,torque_sensor_b,6,joint,measured,mechanical,False,False,N·m,inferred from name
+122,motor_iq_6,motor_iq,6,joint,computed,electrical,False,True,A,inferred from name
+123,motor_id_6,motor_id,6,joint,computed,electrical,False,False,A,inferred from name
+124,power_motor_el_6,power_motor_el,6,joint,computed,electrical,False,False,W,inferred from name
+125,power_motor_mech_6,power_motor_mech,6,joint,computed,mechanical,False,False,W,inferred from name
+126,power_load_mech_6,power_load_mech,6,joint,computed,mechanical,False,True,W,inferred from name
+127,motor_voltage_6,motor_voltage,6,joint,measured,electrical,False,False,V,inferred from name
+128,supply_voltage_6,supply_voltage,6,joint,measured,electrical,False,False,V,inferred from name
+129,brake_voltage_6,brake_voltage,6,joint,measured,electrical,False,False,V,inferred from name

@@ -1,0 +1,9 @@
+# raw voraus-AD files are not redistributed (see data/raw/README.md)
+data/raw/*.parquet
+data/raw/*.pkl
+
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.DS_Store

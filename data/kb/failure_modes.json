@@ -1,0 +1,434 @@
+[
+ {
+  "id": "FM_friction",
+  "name": "Additional axis friction",
+  "group": "axis wear",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "torque_sensor_a",
+   "robot_current"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 1,
+   "temporal": "sustained"
+  },
+  "voraus_category": 0,
+  "in_dataset": true,
+  "cause": "Bearing/gearbox wear or loss of lubrication",
+  "effect": "Elevated torque, heat, position-tracking error",
+  "recommendation": "Inspect & lubricate joint bearing; check gearbox backlash"
+ },
+ {
+  "id": "FM_miscommutation",
+  "name": "Motor miscommutation",
+  "group": "axis wear",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "robot_current"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": 10,
+  "in_dataset": true,
+  "cause": "Encoder/commutation offset or Hall-sensor fault",
+  "effect": "Torque ripple, jerky motion, current spikes",
+  "recommendation": "Recalibrate commutation/encoder offset for the joint"
+ },
+ {
+  "id": "FM_misgrip",
+  "name": "Misgrip of can",
+  "group": "gripping error",
+  "affects": "distal",
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "torque_sensor_a",
+   "joint_position"
+  ],
+  "phase_hint": "grip",
+  "phase_classes": [
+   "pick",
+   "place"
+  ],
+  "signature": {
+   "direction": -1,
+   "temporal": "sustained"
+  },
+  "voraus_category": 5,
+  "in_dataset": true,
+  "cause": "Vacuum seal weak or part mispositioned at pick",
+  "effect": "Lower-than-expected lift load; failed place",
+  "recommendation": "Check vacuum pressure & gripping position/teach point"
+ },
+ {
+  "id": "FM_losecan",
+  "name": "Losing the can mid-transfer",
+  "group": "gripping error",
+  "affects": "load",
+  "joints": [
+   1,
+   2,
+   3
+  ],
+  "manifests": [
+   "motor_torque",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "transfer",
+  "phase_classes": [
+   "transfer"
+  ],
+  "signature": {
+   "direction": -1,
+   "temporal": "drop"
+  },
+  "voraus_category": 6,
+  "in_dataset": true,
+  "cause": "Vacuum loss / slip during motion",
+  "effect": "Sudden torque drop on load joints late in cycle; dropped part",
+  "recommendation": "Check vacuum line & seal; verify surface condition"
+ },
+ {
+  "id": "FM_axisweight",
+  "name": "Additional axis weight",
+  "group": "process error",
+  "affects": "load",
+  "joints": [
+   1,
+   2,
+   3
+  ],
+  "manifests": [
+   "motor_torque",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 1,
+   "temporal": "sustained"
+  },
+  "voraus_category": 1,
+  "in_dataset": true,
+  "cause": "Unexpected payload/attachment on a joint",
+  "effect": "Sustained elevated torque; accelerated wear",
+  "recommendation": "Verify payload configuration & tool weight settings"
+ },
+ {
+  "id": "FM_collision_foam",
+  "name": "Collision with foam",
+  "group": "process error",
+  "affects": "distal",
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "joint_velocity"
+  ],
+  "phase_hint": "transfer",
+  "phase_classes": [
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": 2,
+  "in_dataset": true,
+  "cause": "Soft obstacle (foam) in motion path",
+  "effect": "Torque spike + velocity disruption at contact",
+  "recommendation": "Clear workspace; verify path & safety zones"
+ },
+ {
+  "id": "FM_collision_cable",
+  "name": "Collision with cables",
+  "group": "process error",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "joint_velocity"
+  ],
+  "phase_hint": "transfer",
+  "phase_classes": [
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": 3,
+  "in_dataset": true,
+  "cause": "Loose cables in the motion path",
+  "effect": "Torque spike on contact; possible snag",
+  "recommendation": "Secure/route cables out of the work envelope"
+ },
+ {
+  "id": "FM_collision_card",
+  "name": "Collision with cardboard",
+  "group": "process error",
+  "affects": "distal",
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "joint_velocity"
+  ],
+  "phase_hint": "transfer",
+  "phase_classes": [
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": 4,
+  "in_dataset": true,
+  "cause": "Cardboard obstacle in path",
+  "effect": "Torque spike + trajectory deviation",
+  "recommendation": "Clear workspace; inspect fixture layout"
+ },
+ {
+  "id": "FM_varweight",
+  "name": "Varying can weight",
+  "group": "process error",
+  "affects": "load",
+  "joints": [
+   1,
+   2,
+   3
+  ],
+  "manifests": [
+   "motor_torque",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "grip",
+  "phase_classes": [
+   "pick",
+   "place"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "sustained"
+  },
+  "voraus_category": 7,
+  "in_dataset": true,
+  "cause": "Inconsistent product weight between cycles",
+  "effect": "Torque offset proportional to weight; grip/place variance",
+  "recommendation": "Add weight check / adaptive grip-force control"
+ },
+ {
+  "id": "FM_cable_routed",
+  "name": "Cable routed at robot",
+  "group": "process error",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "motor_torque",
+   "torque_sensor_a",
+   "joint_velocity"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 1,
+   "temporal": "sustained"
+  },
+  "voraus_category": 8,
+  "in_dataset": true,
+  "cause": "Cable bundle routed across moving links (snag/resistance)",
+  "effect": "Elevated torque across motion; intermittent resistance",
+  "recommendation": "Re-route dress-pack; add cable management"
+ },
+ {
+  "id": "FM_invalidgrip",
+  "name": "Invalid gripping position",
+  "group": "process error",
+  "affects": "distal",
+  "joints": [
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "joint_position",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "grip",
+  "phase_classes": [
+   "pick",
+   "place"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": null
+  },
+  "voraus_category": 9,
+  "in_dataset": true,
+  "cause": "Part mislocated or incorrect teach point",
+  "effect": "Position deviation + torque anomaly at grip",
+  "recommendation": "Re-teach grip pose; check fixture/feeder alignment"
+ },
+ {
+  "id": "FM_platform",
+  "name": "Unstable platform",
+  "group": "process error",
+  "affects": [
+   1,
+   2
+  ],
+  "joints": [
+   1,
+   2
+  ],
+  "manifests": [
+   "motor_torque",
+   "joint_velocity",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": 11,
+  "in_dataset": true,
+  "cause": "Loose base mounting / unstable platform",
+  "effect": "Low-frequency oscillation; broad torque deviation on proximal joints",
+  "recommendation": "Secure base mounting; check platform leveling/bolts"
+ },
+ {
+  "id": "FM_backlash",
+  "name": "Gearbox backlash / play",
+  "group": "axis wear",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "joint_position",
+   "torque_sensor_a"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 0,
+   "temporal": "transient"
+  },
+  "voraus_category": null,
+  "in_dataset": false,
+  "cause": "Worn gearbox / increased transmission play",
+  "effect": "Position overshoot; torque chatter on reversal",
+  "recommendation": "Measure backlash; schedule gearbox service"
+ },
+ {
+  "id": "FM_overtemp",
+  "name": "Drive overtemperature (inferred)",
+  "group": "axis wear",
+  "affects": "any",
+  "joints": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "manifests": [
+   "robot_current",
+   "motor_torque"
+  ],
+  "phase_hint": "any",
+  "phase_classes": [
+   "pick",
+   "place",
+   "transfer"
+  ],
+  "signature": {
+   "direction": 1,
+   "temporal": "sustained"
+  },
+  "voraus_category": null,
+  "in_dataset": false,
+  "cause": "Sustained overload / cooling issue (NO temp sensor -> inferred)",
+  "effect": "Current rise for same torque; thermal derating",
+  "recommendation": "Infer from current/torque trend; add thermal monitoring"
+ }
+]

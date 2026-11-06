@@ -1,0 +1,1625 @@
+{
+ "description": "Isolability refinement chain of the FMEA knowledge base. Each level adds evidence rows to the fault signature matrix; blocks are modes with identical cumulative columns (structural twins at that level). isolable[a][b] is true when some row is 1 for a and 0 for b. nested_pairs lists one-way pairs (inner is not isolable from outer, outer is isolable from inner).",
+ "modes": [
+  "FM_misgrip",
+  "FM_invalidgrip",
+  "FM_collision_foam",
+  "FM_collision_card",
+  "FM_platform",
+  "FM_losecan",
+  "FM_varweight",
+  "FM_axisweight",
+  "FM_backlash",
+  "FM_overtemp",
+  "FM_miscommutation",
+  "FM_collision_cable",
+  "FM_friction",
+  "FM_cable_routed"
+ ],
+ "mode_category": {
+  "FM_misgrip": 5,
+  "FM_invalidgrip": 9,
+  "FM_collision_foam": 2,
+  "FM_collision_card": 4,
+  "FM_platform": 11,
+  "FM_losecan": 6,
+  "FM_varweight": 7,
+  "FM_axisweight": 1,
+  "FM_backlash": null,
+  "FM_overtemp": null,
+  "FM_miscommutation": 10,
+  "FM_collision_cable": 3,
+  "FM_friction": 0,
+  "FM_cable_routed": 8
+ },
+ "anomalous_cycles_per_mode": {
+  "FM_misgrip": 11,
+  "FM_invalidgrip": 12,
+  "FM_collision_foam": 72,
+  "FM_collision_card": 22,
+  "FM_platform": 37,
+  "FM_losecan": 74,
+  "FM_varweight": 80,
+  "FM_axisweight": 156,
+  "FM_backlash": 0,
+  "FM_overtemp": 0,
+  "FM_miscommutation": 89,
+  "FM_collision_cable": 48,
+  "FM_friction": 144,
+  "FM_cable_routed": 10
+ },
+ "levels": [
+  {
+   "id": "L0",
+   "label": "No evidence",
+   "adds": "nothing",
+   "read_by_deployed_score": true,
+   "rows_added": [],
+   "blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip",
+     "FM_collision_foam",
+     "FM_collision_card",
+     "FM_platform",
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight",
+     "FM_backlash",
+     "FM_overtemp",
+     "FM_miscommutation",
+     "FM_collision_cable",
+     "FM_friction",
+     "FM_cable_routed"
+    ]
+   ],
+   "block_parent": [
+    null
+   ]
+  },
+  {
+   "id": "L1",
+   "label": "Joint scope",
+   "adds": "which joints the mode can affect",
+   "read_by_deployed_score": true,
+   "rows_added": [
+    "joint:1",
+    "joint:2",
+    "joint:3",
+    "joint:4",
+    "joint:5",
+    "joint:6"
+   ],
+   "blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip",
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_platform"
+    ],
+    [
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight"
+    ],
+    [
+     "FM_backlash",
+     "FM_overtemp",
+     "FM_miscommutation",
+     "FM_collision_cable",
+     "FM_friction",
+     "FM_cable_routed"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip",
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight"
+    ],
+    [
+     "FM_backlash",
+     "FM_overtemp",
+     "FM_miscommutation",
+     "FM_collision_cable",
+     "FM_friction",
+     "FM_cable_routed"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_losecan"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_varweight"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_axisweight"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_overtemp"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_miscommutation"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_cable_routed"
+    }
+   ],
+   "isolable": {
+    "FM_misgrip": {
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_invalidgrip": {
+     "FM_misgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_foam": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_card": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_platform": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_losecan": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_varweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_axisweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_backlash": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_overtemp": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_miscommutation": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_cable": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_friction": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_cable_routed": false
+    },
+    "FM_cable_routed": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false
+    }
+   },
+   "anomalous_cycles_with_true_mode_in_twin_block": 718
+  },
+  {
+   "id": "L2",
+   "label": "+ signal families",
+   "adds": "which signal families the deviation shows in (deployed representation)",
+   "read_by_deployed_score": true,
+   "rows_added": [
+    "motor_torque@J1",
+    "motor_torque@J2",
+    "motor_torque@J3",
+    "motor_torque@J4",
+    "motor_torque@J5",
+    "motor_torque@J6",
+    "torque_sensor_a@J1",
+    "torque_sensor_a@J2",
+    "torque_sensor_a@J3",
+    "torque_sensor_a@J4",
+    "torque_sensor_a@J5",
+    "torque_sensor_a@J6",
+    "joint_velocity@J1",
+    "joint_velocity@J2",
+    "joint_velocity@J3",
+    "joint_velocity@J4",
+    "joint_velocity@J5",
+    "joint_velocity@J6",
+    "joint_position@J1",
+    "joint_position@J2",
+    "joint_position@J3",
+    "joint_position@J4",
+    "joint_position@J5",
+    "joint_position@J6",
+    "robot_current",
+    "system_current"
+   ],
+   "blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip"
+    ],
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_platform"
+    ],
+    [
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight"
+    ],
+    [
+     "FM_backlash"
+    ],
+    [
+     "FM_overtemp",
+     "FM_miscommutation"
+    ],
+    [
+     "FM_collision_cable"
+    ],
+    [
+     "FM_friction"
+    ],
+    [
+     "FM_cable_routed"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0,
+    1,
+    2,
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "n_blocks": 9,
+   "twin_blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip"
+    ],
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight"
+    ],
+    [
+     "FM_overtemp",
+     "FM_miscommutation"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_overtemp",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_miscommutation",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_collision_cable",
+     "outer": "FM_cable_routed"
+    }
+   ],
+   "isolable": {
+    "FM_misgrip": {
+     "FM_invalidgrip": false,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_invalidgrip": {
+     "FM_misgrip": false,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_collision_foam": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_collision_card": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_platform": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_losecan": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_varweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": false,
+     "FM_axisweight": false,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_axisweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_backlash": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_overtemp": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_miscommutation": false,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": true
+    },
+    "FM_miscommutation": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": false,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": true
+    },
+    "FM_collision_cable": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_friction": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_cable_routed": true
+    },
+    "FM_cable_routed": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true
+    }
+   },
+   "anomalous_cycles_with_true_mode_in_twin_block": 516
+  },
+  {
+   "id": "L3",
+   "label": "+ phase hint",
+   "adds": "in which task phases the mode is expected (deployed score, phase term)",
+   "read_by_deployed_score": true,
+   "rows_added": [
+    "phase:pick",
+    "phase:place",
+    "phase:transfer"
+   ],
+   "blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip"
+    ],
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_platform"
+    ],
+    [
+     "FM_losecan"
+    ],
+    [
+     "FM_varweight"
+    ],
+    [
+     "FM_axisweight"
+    ],
+    [
+     "FM_backlash"
+    ],
+    [
+     "FM_overtemp",
+     "FM_miscommutation"
+    ],
+    [
+     "FM_collision_cable"
+    ],
+    [
+     "FM_friction"
+    ],
+    [
+     "FM_cable_routed"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    3,
+    3,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "n_blocks": 11,
+   "twin_blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip"
+    ],
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_overtemp",
+     "FM_miscommutation"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_invalidgrip",
+     "outer": "FM_backlash"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_platform",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_axisweight"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_losecan",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_axisweight"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_varweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_overtemp",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_miscommutation",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_collision_cable",
+     "outer": "FM_cable_routed"
+    }
+   ],
+   "isolable": {
+    "FM_misgrip": {
+     "FM_invalidgrip": false,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_invalidgrip": {
+     "FM_misgrip": false,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": false,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_collision_foam": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_collision_card": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_platform": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_losecan": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_varweight": true,
+     "FM_axisweight": false,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_varweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_axisweight": false,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_axisweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_backlash": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_overtemp": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_miscommutation": false,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": true
+    },
+    "FM_miscommutation": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": false,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": true
+    },
+    "FM_collision_cable": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_friction": true,
+     "FM_cable_routed": false
+    },
+    "FM_friction": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_cable_routed": true
+    },
+    "FM_cable_routed": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true
+    }
+   },
+   "anomalous_cycles_with_true_mode_in_twin_block": 206
+  },
+  {
+   "id": "L4",
+   "label": "+ physical signature",
+   "adds": "authored torque direction and time course (not read by the deployed score)",
+   "read_by_deployed_score": false,
+   "rows_added": [
+    "direction:up",
+    "direction:down",
+    "temporal:sustained",
+    "temporal:drop",
+    "temporal:rise",
+    "temporal:transient"
+   ],
+   "blocks": [
+    [
+     "FM_misgrip"
+    ],
+    [
+     "FM_invalidgrip"
+    ],
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ],
+    [
+     "FM_platform"
+    ],
+    [
+     "FM_losecan"
+    ],
+    [
+     "FM_varweight"
+    ],
+    [
+     "FM_axisweight"
+    ],
+    [
+     "FM_backlash"
+    ],
+    [
+     "FM_overtemp"
+    ],
+    [
+     "FM_miscommutation"
+    ],
+    [
+     "FM_collision_cable"
+    ],
+    [
+     "FM_friction"
+    ],
+    [
+     "FM_cable_routed"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    7,
+    8,
+    9,
+    10
+   ],
+   "n_blocks": 13,
+   "twin_blocks": [
+    [
+     "FM_collision_foam",
+     "FM_collision_card"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "FM_misgrip",
+     "outer": "FM_invalidgrip"
+    },
+    {
+     "inner": "FM_collision_foam",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_collision_card",
+     "outer": "FM_collision_cable"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_friction"
+    },
+    {
+     "inner": "FM_axisweight",
+     "outer": "FM_cable_routed"
+    },
+    {
+     "inner": "FM_overtemp",
+     "outer": "FM_friction"
+    }
+   ],
+   "isolable": {
+    "FM_misgrip": {
+     "FM_invalidgrip": false,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_invalidgrip": {
+     "FM_misgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_collision_foam": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_card": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_collision_card": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": false,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": false,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_platform": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_losecan": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_varweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_axisweight": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_backlash": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_overtemp": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": false,
+     "FM_cable_routed": true
+    },
+    "FM_miscommutation": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_collision_cable": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_collision_cable": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_friction": true,
+     "FM_cable_routed": true
+    },
+    "FM_friction": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_cable_routed": true
+    },
+    "FM_cable_routed": {
+     "FM_misgrip": true,
+     "FM_invalidgrip": true,
+     "FM_collision_foam": true,
+     "FM_collision_card": true,
+     "FM_platform": true,
+     "FM_losecan": true,
+     "FM_varweight": true,
+     "FM_axisweight": true,
+     "FM_backlash": true,
+     "FM_overtemp": true,
+     "FM_miscommutation": true,
+     "FM_collision_cable": true,
+     "FM_friction": true
+    }
+   },
+   "anomalous_cycles_with_true_mode_in_twin_block": 94
+  }
+ ]
+}

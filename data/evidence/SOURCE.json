@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/chenxuanzhou/Structural-Non-Isolability-in-Knowledge-Based-Robot-Fault-Diagnosis",
+  "commit": "438389f10b034c3b215750b9fd4ca734d72b106c",
+  "files": {
+    "records_anomalous.json": {
+      "copied_from": "data/records_cache.json",
+      "sha256": "a1acb2af85f39b6bd2870489853b9ca4922304b880fe116ecb9019feed9718df"
+    },
+    "unread_features.json": {
+      "copied_from": "data/repair_features.json",
+      "sha256": "91db28ed83ffee3519ce30a61ee372396b7b2acc787b00d67ded546f8619b422"
+    },
+    "payload_torque.json": {
+      "copied_from": "data/payload_torque.json",
+      "sha256": "b3092a429125521df19ddc8af997d93c7ad2901094c0ffc700532ebbaf4e297e"
+    }
+  }
+}

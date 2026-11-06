@@ -1,0 +1,16 @@
+action,enum_name,motion,phase_class,can_carried
+0,VOID_1,VOID,,False
+1,TO_SCAN_PTP,PTP,transfer,False
+2,VOID_2,VOID,,False
+3,OVER_OBJECT_PTP,PTP,transfer,False
+4,VOID_3,VOID,,False
+5,DOWN_PICK_LIN,LIN,pick,False
+6,VOID_4,VOID,,False
+7,UP_PICK_LIN,LIN,pick,True
+8,VOID_5,VOID,,True
+9,TO_PLACE_PTP,PTP,transfer,True
+10,VOID_6,VOID,,True
+11,DOWN_PLACE_LIN,LIN,place,True
+12,VOID_7,VOID,,True
+13,UP_PLACE_LIN,LIN,place,False
+14,VOID_8,VOID,,False
