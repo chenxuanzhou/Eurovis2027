@@ -9,3 +9,8 @@ Put `voraus-ad-dataset-100hz.parquet` in this folder, or point `VORAUS_PARQUET` 
   `.gitignore` excludes `*.parquet` in this folder.
 - Columns: 7 meta columns (`time`, `sample`, `anomaly`, `category`, `setting`, `action`, `active`)
   and 130 machine signals, listed in `../catalog/signals.csv`.
+- The copy the committed products were built from: 1,115,942,833 bytes, SHA-256
+  `c90ab1c78af52651b954d41787f7e89d750f0a128b57600b0e5ceec22621f704`; 2,321,690 rows in one row
+  group (Snappy, written by parquet-cpp-arrow 6.0.0), already ordered by `sample` and `time`.
+  Check yours with `sha256sum` (Linux), `shasum -a 256` (macOS) or `certutil -hashfile <file> SHA256`
+  (Windows).

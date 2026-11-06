@@ -9,7 +9,9 @@ collaborative robot (Yu-Cobot, vacuum gripper) repeating one pick-and-place cycl
 
 - **Cycle id** = the voraus-AD `sample` id. Evidence records call it `cycle_id`.
 - **Official split**: training = the 948 anomaly-free cycles with `setting == 72` (Variant `PRE_A`);
-  test = the other 1,174 cycles (419 anomaly-free, 755 anomalous).
+  test = the other 1,174 cycles (419 anomaly-free, 755 anomalous). The 419 anomaly-free test cycles
+  come from four other normal sessions: `PRE_B` (319), `BETWEEN_A` (37), `BETWEEN_B` (44) and
+  `BETWEEN_C` (19).
 - **Leave-setting-out splits** (`splits/leave_setting_out.json`): five 50/50 splits of the 755
   anomalous cycles in which every setting is wholly in *fit* or wholly in *test*. Use them for every
   learned component. Cycles of one setting are repeated runs of one physical fault, so a random split
@@ -19,7 +21,9 @@ collaborative robot (Yu-Cobot, vacuum gripper) repeating one pick-and-place cycl
 - **z-scores** in the evidence records: (observed − envelope mean) / envelope scale, where
   scale = max(std, 0.05 × range of the mean curve), computed over the 948 training cycles.
 - **Action codes** 0–14 follow the official `Action` enum; odd codes are moves, even codes are
-  VOID transitions (`catalog/actions.csv`). The can is carried during actions 7–12.
+  VOID transitions (`catalog/actions.csv`). The can is carried during actions 7–12. The raw `active`
+  flag is 1 while a move runs (odd codes) and 0 in VOID phases, so `active_fraction` in
+  `cycles/` is the share of the cycle spent moving.
 
 ## Files
 
@@ -55,8 +59,14 @@ block: L1 718, L2 516, L3 206, L4 94 (only collision with foam vs cardboard rema
 | `records_anomalous.json` | Evidence records (schema 0.3) of the 755 anomalous cycles, copied byte for byte from the SAFEPROCESS repository (`SOURCE.json` has commit and sha256). Per record: `localization` (dominant joint and phase, joint rankings), `attributed_signals` (top 5 by peak z), `signature.slots` (26 channels × [z_peak, z_signed, z_step, z_payload, z_std]). No detector score: diagnosis numbers assume perfect detection. |
 | `unread_features.json` | The same five statistics for 12 channels the retrieval never reads (`power_load_mech_1..6`, `motor_iq_1..6`), keyed by cycle id |
 | `payload_torque.json` | Carried-payload torque per joint measured from normal cycles by pose matching |
-| `records_normal_test.json` | *(built from raw)* Evidence records of the 419 anomaly-free test cycles, same builder and envelope |
-| `regeneration_check.json` | *(built from raw)* The 755 anomalous records rebuilt from raw and compared slot by slot with the copied ones |
+| `records_normal_test.json` | *(built from raw)* Evidence records of the 419 anomaly-free test cycles, same builder and envelope; `detector.verdict` says they are normal by ground truth |
+| `regeneration_check.json` | *(built from raw)* The 755 anomalous records rebuilt from raw and compared with the copied ones: per cycle the largest slot difference, whether the top-5 signals and the dominant joint agree. Result: all 755 rebuilt, largest difference 0.000, top 5 and dominant joint identical for every cycle |
+
+The anomaly-free records are a null reference, not a negative class for detection. Their top-1 peak
+z has a median of 4.8 (anomalous cycles: 5.3), because the maximum over 26 channels × 500 points is
+large even without a fault and the test sessions differ from the training session. Peak z explains a
+cycle that a detector has flagged; to judge how unusual a slot value is, compare it with the same slot
+over these 419 records.
 
 ### splits/
 
@@ -69,7 +79,9 @@ them on one side only). The split sizes equal those reported by the SAFEPROCESS 
 | File | Contents |
 |---|---|
 | `cycles.parquet` / `.csv` | One row per cycle (2,122): `sample`, `category`, `setting`, `anomaly`, `n_rows`, `t_start`, `duration_s`, `dt_median_s`, `active_fraction`, `n_actions`, `official_split`, `lso0`…`lso4` (fit / test / empty) |
-| `action_segments.parquet` | One row per contiguous action segment: `sample`, `segment`, `action`, `t_start`, `t_end` (seconds from cycle start), `progress_start`, `progress_end`, `n_rows` |
+| `action_segments.parquet` | One row per contiguous action segment (30,266; 14–15 per cycle): `sample`, `segment`, `action`, `t_start`, `t_end` (seconds from cycle start), `progress_start`, `progress_end`, `n_rows` |
+
+Cycles last 9.9–11.7 s at about 100 Hz (986–1,164 rows).
 
 ### envelope/ *(built from raw)*
 
@@ -85,5 +97,7 @@ Per-cycle signals on the progress grid for the 1,174 test cycles (one file per a
 (`normal_train_sample.parquet`, seed 2027). Columns: `sample`, `grid_idx`, `action`, then 44 channels:
 `motor_torque`, `torque_sensor_a`, `joint_velocity`, `joint_position`, `motor_iq`, `power_load_mech`,
 `target_torque` for joints 1–6, and `robot_current`, `system_current`. Values are float32 rounded to
-12 mantissa bits (relative error ≤ 1.2e-4), which keeps the files small; for analysis at full precision
-rebuild from raw. `manifest.json` lists the parts and their cycles.
+12 mantissa bits (relative error ≤ 1.2e-4), which keeps the 14 files at 45 MB in total (largest
+14.6 MB); for analysis at full precision rebuild from raw. Float columns use Parquet's
+BYTE_STREAM_SPLIT encoding; pandas/pyarrow and DuckDB read the files directly.
+`manifest.json` lists the parts and their cycles.

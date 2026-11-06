@@ -22,7 +22,10 @@ Outputs
                                            the copied SAFEPROCESS records
 
 Resampling follows attribution_bridge._resample: time is normalized per cycle to [0, 1]
-and every channel is linearly interpolated onto np.linspace(0, 1, 500).
+and every channel is linearly interpolated onto np.linspace(0, 1, 500), in float64.
+
+The released file is a single 2.3-million-row group, so filtering on read saves nothing;
+columns are decoded a few at a time instead, which keeps the peak memory near 1.5 GB.
 
 Run from the repository root:  python pipeline/build_from_raw.py
 """
@@ -44,57 +47,79 @@ EPS = AB.EPS
 META = ["time", "sample", "anomaly", "category", "setting", "action", "active"]
 KB_CHANNELS = [f"{f}_{j}" for f in AB.JOINT_SIGNALS for j in AB.JOINTS] + list(AB.ROBOT_SIGNALS)
 QUANTILES = (0.05, 0.25, 0.5, 0.75, 0.95)
+BATCH = 16          # channels decoded per read
 
 
 def log(msg: str) -> None:
     print(time.strftime("%H:%M:%S"), msg, flush=True)
 
 
-def read(columns: list[str], filters=None, float32: bool = True) -> pd.DataFrame:
-    table = pq.read_table(C.RAW_PARQUET, columns=columns, filters=filters)
-    df = table.to_pandas()
-    for c in df.columns:
-        if c == "time":
-            df[c] = df[c].astype(np.float64)
-        elif float32 and df[c].dtype == np.float64:
-            df[c] = df[c].astype(np.float32)
-    return df.sort_values(["sample", "time"], kind="stable").reset_index(drop=True)
-
-
-def cycle_slices(df: pd.DataFrame) -> list[tuple[int, int, int]]:
-    s = df["sample"].to_numpy()
-    starts = np.flatnonzero(np.r_[True, s[1:] != s[:-1]])
-    ends = np.r_[starts[1:], len(s)]
-    return [(int(s[a]), int(a), int(b)) for a, b in zip(starts, ends)]
-
-
 def progress(t: np.ndarray) -> np.ndarray:
     return (t - t.min()) / (t.max() - t.min() + EPS)
 
 
-def resample_block(df: pd.DataFrame, a: int, b: int, cols: list[str], grid: np.ndarray,
-                   dtype=np.float32) -> np.ndarray:
-    tn = progress(df["time"].to_numpy()[a:b])
-    return np.vstack([np.interp(grid, tn, df[c].to_numpy()[a:b].astype(np.float64)) for c in cols]).astype(dtype)
+class Raw:
+    """The raw parquet with rows in (sample, time) order, read a few columns at a time."""
 
+    def __init__(self, path=C.RAW_PARQUET):
+        self.pf = pq.ParquetFile(path)
+        meta = self.pf.read(columns=META).to_pandas()
+        order = np.lexsort((meta["time"].to_numpy(), meta["sample"].to_numpy()))  # stable
+        self.order = None if np.array_equal(order, np.arange(len(order))) else order
+        self.meta = meta if self.order is None else meta.iloc[order].reset_index(drop=True)
+        s = self.meta["sample"].to_numpy()
+        starts = np.flatnonzero(np.r_[True, s[1:] != s[:-1]])
+        ends = np.r_[starts[1:], len(s)]
+        self.slices = {int(s[a]): (int(a), int(b)) for a, b in zip(starts, ends)}
+        t = self.meta["time"].to_numpy()
+        self.tn = np.empty_like(t)                     # per-cycle progress in [0, 1]
+        for a, b in self.slices.values():
+            self.tn[a:b] = progress(t[a:b])
+        self.action = self.meta["action"].to_numpy()
 
-def action_on_grid(df: pd.DataFrame, a: int, b: int, grid: np.ndarray) -> np.ndarray:
-    tn = progress(df["time"].to_numpy()[a:b])
-    act = df["action"].to_numpy()[a:b]
-    return act[np.searchsorted(tn, grid, side="right") - 1].astype(np.int8)
+    def columns(self, names: list[str]):
+        """Yield (name, float64 values in (sample, time) order)."""
+        for k in range(0, len(names), BATCH):
+            batch = names[k:k + BATCH]
+            table = self.pf.read(columns=batch)
+            for n in batch:
+                x = table.column(n).to_numpy().astype(np.float64, copy=False)
+                yield n, (x if self.order is None else x[self.order])
+            del table
+
+    def resample(self, names: list[str], samples: list[int], grid: np.ndarray,
+                 dtype=np.float32) -> np.ndarray:
+        """(cycles, channels, grid) on the progress grid, as attribution_bridge._resample does it."""
+        out = np.empty((len(samples), len(names), len(grid)), dtype=dtype)
+        for j, (_, x) in enumerate(self.columns(names)):
+            for i, sid in enumerate(samples):
+                a, b = self.slices[sid]
+                out[i, j] = np.interp(grid, self.tn[a:b], x[a:b])
+        return out
+
+    def actions(self, samples: list[int], grid: np.ndarray) -> np.ndarray:
+        """Action code at each grid point (the sample at or just before it, as in attribute())."""
+        out = np.empty((len(samples), len(grid)), dtype=np.int8)
+        for i, sid in enumerate(samples):
+            a, b = self.slices[sid]
+            out[i] = self.action[a:b][np.searchsorted(self.tn[a:b], grid, side="right") - 1]
+        return out
 
 
 # ---------------------------------------------------------------------------
-def build_cycles(meta: pd.DataFrame) -> pd.DataFrame:
+def build_cycles(raw: Raw) -> pd.DataFrame:
     lso = json.loads((C.DATA / "splits" / "leave_setting_out.json").read_text(encoding="utf-8"))
+    member = {seed: ({int(i) for i in s["fit_cycles"]}, {int(i) for i in s["test_cycles"]})
+              for seed, s in lso["seeds"].items()}
+    meta = raw.meta
     rows, segs = [], []
-    for sid, a, b in cycle_slices(meta):
+    for sid, (a, b) in sorted(raw.slices.items()):
         run = meta.iloc[a:b]
         for col in ("anomaly", "category", "setting"):
             if run[col].nunique() != 1:
                 raise ValueError(f"cycle {sid}: {col} not constant")
         t = run["time"].to_numpy()
-        tn = progress(t)
+        tn = raw.tn[a:b]
         dt = np.diff(t)
         row = {
             "sample": sid, "category": int(run["category"].iat[0]),
@@ -105,9 +130,8 @@ def build_cycles(meta: pd.DataFrame) -> pd.DataFrame:
             "n_actions": int(run["action"].nunique()),
         }
         row["official_split"] = "train" if row["setting"] == C.TRAIN_SETTING else "test"
-        for seed, s in lso["seeds"].items():
-            row[f"lso{seed}"] = ("fit" if sid in set(s["fit_cycles"])
-                                 else "test" if sid in set(s["test_cycles"]) else None)
+        for seed, (fit, test) in member.items():
+            row[f"lso{seed}"] = "fit" if sid in fit else "test" if sid in test else None
         rows.append(row)
         act = run["action"].to_numpy()
         change = np.flatnonzero(np.r_[True, act[1:] != act[:-1]])
@@ -127,19 +151,17 @@ def build_cycles(meta: pd.DataFrame) -> pd.DataFrame:
     return cycles
 
 
-def build_envelope(grid: np.ndarray) -> dict:
+def build_envelope(raw: Raw, train: list[int], grid: np.ndarray) -> dict:
     cols = list(Signals.machine())
-    df = read(["time", "sample", "setting", "action"] + cols, filters=[("setting", "=", C.TRAIN_SETTING)],
-              float32=False)
-    sl = cycle_slices(df)
-    stack = np.stack([resample_block(df, a, b, cols, grid, np.float64) for _, a, b in sl])  # (n, ch, grid)
-    acts = np.stack([action_on_grid(df, a, b, grid) for _, a, b in sl])          # (n, grid)
+    stack = raw.resample(cols, train, grid, np.float64)          # (948, 130, 500), ~0.5 GB
+    acts = raw.actions(train, grid)
     mean, std = stack.mean(axis=0), stack.std(axis=0)
     ptp = np.ptp(mean, axis=1, keepdims=True)
     scale = np.maximum(std, 0.05 * np.where(ptp > 0, ptp, 1.0))
     qs = np.quantile(stack, QUANTILES, axis=0)
+    del stack
     n_ch, n_g = mean.shape
-    f32 = lambda a: a.ravel().astype(np.float32)
+    f32 = lambda a: a.ravel().astype(np.float32)  # noqa: E731
     env = pd.DataFrame({
         "channel": np.repeat(cols, n_g), "grid_idx": np.tile(np.arange(n_g, dtype=np.int16), n_ch),
         "progress": np.tile(grid.astype(np.float32), n_ch),
@@ -155,9 +177,9 @@ def build_envelope(grid: np.ndarray) -> dict:
     frac = np.array([(acts[:, g] == modal[g]).mean() for g in range(n_g)])
     pd.DataFrame({"grid_idx": np.arange(n_g), "progress": grid, "modal_action": modal,
                   "modal_fraction": frac.round(4)}).to_csv(out / "normal_phase_grid500.csv", index=False)
-    log(f"envelope: {len(sl)} training cycles x {n_ch} channels")
+    log(f"envelope: {len(train)} training cycles x {n_ch} channels")
     idx = {c: k for k, c in enumerate(cols)}
-    del stack
+    # float64 reference for the evidence records, exactly as build_reference computes it
     return {c: {"mean": mean[idx[c]], "scale": scale[idx[c]]} for c in KB_CHANNELS}
 
 
@@ -165,8 +187,8 @@ def trim_mantissa(x: np.ndarray, keep_bits: int = C.GRID_KEEP_MANTISSA_BITS) -> 
     """Round float32 values to `keep_bits` mantissa bits (relative error <= 2**-(keep_bits+1)).
 
     The dropped low bits become zero, which byte_stream_split + zstd compress to almost
-    nothing, so the files shrink to roughly float16 size while staying plain float32 for
-    every reader (pandas, DuckDB, Arrow JS).
+    nothing, so the files shrink to roughly float16 size while staying plain float32
+    (read as is by pandas/pyarrow and DuckDB).
     """
     drop = 23 - keep_bits
     bits = np.ascontiguousarray(x, dtype=np.float32).view(np.uint32)
@@ -189,10 +211,8 @@ def write_part(frames: list[pd.DataFrame], name: str, schema_cols: list[str]) ->
     return {"file": path.name, "megabytes": round(mb, 2)}
 
 
-def build_grid_signals(cycles: pd.DataFrame, grid: np.ndarray) -> None:
+def build_grid_signals(raw: Raw, cycles: pd.DataFrame, grid: np.ndarray) -> None:
     cols = C.grid_channels()
-    df = read(["time", "sample", "action"] + cols, float32=False)
-    sl = {sid: (a, b) for sid, a, b in cycle_slices(df)}
     parts: dict[str, list[int]] = {}
     for r in cycles.itertuples():
         if r.anomaly:
@@ -201,45 +221,48 @@ def build_grid_signals(cycles: pd.DataFrame, grid: np.ndarray) -> None:
             key = "normal_test"
         else:
             continue
-        parts.setdefault(key, []).append(r.sample)
-    train = sorted(cycles.loc[cycles["official_split"] == "train", "sample"])
+        parts.setdefault(key, []).append(int(r.sample))
+    train = sorted(int(s) for s in cycles.loc[cycles["official_split"] == "train", "sample"])
     rng = np.random.default_rng(C.TRAIN_SAMPLE_SEED)
-    parts["normal_train_sample"] = sorted(rng.choice(train, size=min(C.TRAIN_SAMPLE_N, len(train)),
-                                                     replace=False).tolist())
+    parts["normal_train_sample"] = sorted(int(s) for s in rng.choice(
+        train, size=min(C.TRAIN_SAMPLE_N, len(train)), replace=False))
+    ids = sorted({s for v in parts.values() for s in v})
+    pos = {s: i for i, s in enumerate(ids)}
+    values = raw.resample(cols, ids, grid, np.float32)            # (1274, 44, 500)
+    acts = raw.actions(ids, grid)
     g = np.arange(len(grid), dtype=np.int16)
     manifest = {"grid_n": len(grid), "channels": cols,
                 "precision": f"float32 rounded to {C.GRID_KEEP_MANTISSA_BITS} mantissa bits "
                              f"(relative error <= {2.0 ** -(C.GRID_KEEP_MANTISSA_BITS + 1):.1e})",
                 "train_sample": {"n": len(parts["normal_train_sample"]), "seed": C.TRAIN_SAMPLE_SEED},
                 "parts": {}}
-    for name, ids in sorted(parts.items()):
+    for name, members in sorted(parts.items()):
         frames = []
-        for sid in sorted(ids):
-            a, b = sl[sid]
-            m = trim_mantissa(resample_block(df, a, b, cols, grid))
-            f = pd.DataFrame(m.T, columns=cols)
-            f.insert(0, "action", action_on_grid(df, a, b, grid))
+        for sid in sorted(members):
+            i = pos[sid]
+            f = pd.DataFrame(trim_mantissa(values[i]).T, columns=cols)
+            f.insert(0, "action", acts[i])
             f.insert(0, "grid_idx", g)
             f.insert(0, "sample", np.int32(sid))
             frames.append(f)
         info = write_part(frames, name, cols)
-        manifest["parts"][name] = {**info, "n_cycles": len(ids), "samples": sorted(int(i) for i in ids)}
+        manifest["parts"][name] = {**info, "n_cycles": len(members), "samples": sorted(members)}
     (C.DATA / "signals" / "grid500" / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
 
 
-def build_records(ref: dict, cycles: pd.DataFrame, grid: np.ndarray) -> None:
-    df = read(["time", "sample", "category", "setting", "action"] + KB_CHANNELS, float32=False)
-    sl = {sid: (a, b) for sid, a, b in cycle_slices(df)}
+def build_records(raw: Raw, ref: dict, cycles: pd.DataFrame, grid: np.ndarray) -> None:
+    data = {"time": raw.meta["time"].to_numpy(), "action": raw.action}
+    data.update(dict(raw.columns(KB_CHANNELS)))
+    df = pd.DataFrame(data)
     test = cycles[cycles["official_split"] == "test"]
     normal_records, rebuilt = [], {}
     for r in test.itertuples():
-        a, b = sl[r.sample]
-        run = df.iloc[a:b]
-        rec = AB.to_bridge_record(AB.attribute(run, ref, grid), sample_id=r.sample,
-                                  category=r.category, setting=r.setting)
+        a, b = raw.slices[int(r.sample)]
+        rec = AB.to_bridge_record(AB.attribute(df.iloc[a:b], ref, grid), sample_id=int(r.sample),
+                                  category=int(r.category), setting=int(r.setting))
         rec.pop("_notes", None)
         if r.anomaly:
-            rebuilt[r.sample] = rec
+            rebuilt[int(r.sample)] = rec
         else:
             rec["detector"]["verdict"] = "normal (ground truth; no detector score yet)"
             normal_records.append(rec)
@@ -253,20 +276,26 @@ def build_records(ref: dict, cycles: pd.DataFrame, grid: np.ndarray) -> None:
             diffs.append({"cycle_id": cid, "issue": "missing in raw"})
             continue
         so, sn = old["signature"]["slots"], new["signature"]["slots"]
-        worst = max(abs(x - y) for k in so for x, y in zip(so[k], sn.get(k, [np.nan] * 5)))
-        same_top = [s["signal"] for s in old["attributed_signals"]] == [s["signal"] for s in new["attributed_signals"]]
-        diffs.append({"cycle_id": cid, "max_abs_slot_diff": round(float(worst), 4), "same_top5": same_top})
+        worst = max(abs(x - y) for k in so for x, y in zip(so[k], sn.get(k, [np.inf] * 5)))
+        diffs.append({
+            "cycle_id": cid, "max_abs_slot_diff": round(float(worst), 4),
+            "same_top5": [s["signal"] for s in old["attributed_signals"]]
+                         == [s["signal"] for s in new["attributed_signals"]],
+            "same_dominant_joint": old["localization"]["dominant_joint"] == new["localization"]["dominant_joint"],
+        })
     d = pd.DataFrame(diffs)
     summary = {
         "n_cached": len(cached), "n_rebuilt": len(rebuilt),
         "max_abs_slot_diff": float(d["max_abs_slot_diff"].max()),
         "share_same_top5": float(d["same_top5"].mean()),
-        "note": "slot values are rounded to 3 decimals in the records, so diffs up to 0.0005 are rounding",
+        "share_same_dominant_joint": float(d["same_dominant_joint"].mean()),
+        "note": "slot values are rounded to 3 decimals in the records, so diffs up to 0.001 are rounding",
         "per_cycle": diffs,
     }
     (ev / "regeneration_check.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     log(f"records: {len(normal_records)} normal test; anomalous rebuilt max slot diff "
-        f"{summary['max_abs_slot_diff']:.4f}, same top-5 {summary['share_same_top5']:.3f}")
+        f"{summary['max_abs_slot_diff']:.4f}, same top-5 {summary['share_same_top5']:.3f}, "
+        f"same dominant joint {summary['share_same_dominant_joint']:.3f}")
 
 
 def main() -> None:
@@ -274,13 +303,15 @@ def main() -> None:
         raise SystemExit(f"raw parquet not found: {C.RAW_PARQUET} (see data/raw/README.md)")
     grid = np.linspace(0, 1, C.GRID_N)
     log("reading meta columns")
-    cycles = build_cycles(read(META))
+    raw = Raw()
+    cycles = build_cycles(raw)
     log("normal envelope")
-    ref = build_envelope(grid)
+    train = sorted(int(s) for s in cycles.loc[cycles["official_split"] == "train", "sample"])
+    ref = build_envelope(raw, train, grid)
     log("grid500 signals")
-    build_grid_signals(cycles, grid)
+    build_grid_signals(raw, cycles, grid)
     log("evidence records")
-    build_records(ref, cycles, grid)
+    build_records(raw, ref, cycles, grid)
     log("done")
 
 

@@ -21,8 +21,9 @@ records of the SAFEPROCESS 2027 study
 | `evidence/` (raw part) | Evidence records of the 419 anomaly-free test cycles; check that the 755 anomalous records rebuild from raw | yes |
 
 `data/README.md` documents every file, its columns and the conventions (cycle id, splits, progress
-grid, z-scores). **Status:** the products that need no raw data are built; the raw-derived ones are
-produced by `pipeline/build_from_raw.py` once the raw parquet is in `data/raw/`.
+grid, z-scores). **Status:** all products are built (53 MB) and pass `pipeline/validate.py`. Rebuilt
+from the raw parquet, the 755 anomalous evidence records match the SAFEPROCESS records exactly, and a
+clean `run_all.py` reproduces every file byte for byte.
 
 ## Rebuild
 
@@ -43,7 +44,7 @@ python pipeline/run_all.py
 `run_all.py` runs, in order, `build_evidence.py`, `build_catalog.py`, `build_kb.py`,
 `build_from_raw.py` (skipped when the parquet is missing) and `validate.py`, which checks every
 product against the dataset counts (2,122 cycles; 948 / 419 / 755; 72 settings) and the split sizes
-of the SAFEPROCESS study.
+of the SAFEPROCESS study. `build_from_raw.py` takes about a minute and 2.5 GB of memory.
 
 ## Layout
 
