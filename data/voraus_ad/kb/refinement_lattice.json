@@ -1,5 +1,7 @@
 {
- "description": "Isolability refinement chain of the FMEA knowledge base. Each level adds evidence rows to the fault signature matrix; blocks are modes with identical cumulative columns (structural twins at that level). isolable[a][b] is true when some row is 1 for a and 0 for b. nested_pairs lists one-way pairs (inner is not isolable from outer, outer is isolable from inner).",
+ "schema": "refinement-lattice/1",
+ "dataset": "voraus_ad",
+ "description": "Isolability refinement chain of the FMEA knowledge base of the SAFEPROCESS 2027 study. Each level adds evidence rows to the fault signature matrix; blocks are modes with identical cumulative columns (structural twins at that level). The no-fault hypothesis is not part of the problem: diagnosis starts from a detected anomaly.",
  "modes": [
   "FM_misgrip",
   "FM_invalidgrip",
@@ -16,7 +18,7 @@
   "FM_friction",
   "FM_cable_routed"
  ],
- "mode_category": {
+ "mode_label": {
   "FM_misgrip": 5,
   "FM_invalidgrip": 9,
   "FM_collision_foam": 2,
@@ -32,7 +34,8 @@
   "FM_friction": 0,
   "FM_cable_routed": 8
  },
- "anomalous_cycles_per_mode": {
+ "null_modes": [],
+ "instances_per_mode": {
   "FM_misgrip": 11,
   "FM_invalidgrip": 12,
   "FM_collision_foam": 72,
@@ -75,7 +78,240 @@
    ],
    "block_parent": [
     null
-   ]
+   ],
+   "n_blocks": 1,
+   "twin_blocks": [
+    [
+     "FM_misgrip",
+     "FM_invalidgrip",
+     "FM_collision_foam",
+     "FM_collision_card",
+     "FM_platform",
+     "FM_losecan",
+     "FM_varweight",
+     "FM_axisweight",
+     "FM_backlash",
+     "FM_overtemp",
+     "FM_miscommutation",
+     "FM_collision_cable",
+     "FM_friction",
+     "FM_cable_routed"
+    ]
+   ],
+   "nested_pairs": [],
+   "isolable": {
+    "FM_misgrip": {
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_invalidgrip": {
+     "FM_misgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_foam": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_card": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_platform": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_losecan": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_varweight": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_axisweight": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_backlash": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_overtemp": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_miscommutation": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_collision_cable": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_collision_cable": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_friction": false,
+     "FM_cable_routed": false
+    },
+    "FM_friction": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_cable_routed": false
+    },
+    "FM_cable_routed": {
+     "FM_misgrip": false,
+     "FM_invalidgrip": false,
+     "FM_collision_foam": false,
+     "FM_collision_card": false,
+     "FM_platform": false,
+     "FM_losecan": false,
+     "FM_varweight": false,
+     "FM_axisweight": false,
+     "FM_backlash": false,
+     "FM_overtemp": false,
+     "FM_miscommutation": false,
+     "FM_collision_cable": false,
+     "FM_friction": false
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 755
   },
   {
    "id": "L1",
@@ -560,7 +796,7 @@
      "FM_friction": false
     }
    },
-   "anomalous_cycles_with_true_mode_in_twin_block": 718
+   "instances_with_true_mode_in_twin_block": 718
   },
   {
    "id": "L2",
@@ -938,7 +1174,7 @@
      "FM_friction": true
     }
    },
-   "anomalous_cycles_with_true_mode_in_twin_block": 516
+   "instances_with_true_mode_in_twin_block": 516
   },
   {
    "id": "L3",
@@ -1302,7 +1538,7 @@
      "FM_friction": true
     }
    },
-   "anomalous_cycles_with_true_mode_in_twin_block": 206
+   "instances_with_true_mode_in_twin_block": 206
   },
   {
    "id": "L4",
@@ -1619,7 +1855,7 @@
      "FM_friction": true
     }
    },
-   "anomalous_cycles_with_true_mode_in_twin_block": 94
+   "instances_with_true_mode_in_twin_block": 94
   }
  ]
 }

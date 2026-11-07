@@ -1,0 +1,54 @@
+[
+ {
+  "id": "normal",
+  "name": "Normal tightening",
+  "label": 0,
+  "assumptions": [],
+  "instances": 1420,
+  "instances_first_copy_only": 1113
+ },
+ {
+  "id": "extra_component",
+  "name": "Extra assembly component (washer)",
+  "label": 2,
+  "assumptions": [
+   "B2"
+  ],
+  "instances": 183,
+  "instances_first_copy_only": 93
+ },
+ {
+  "id": "damaged_screw",
+  "name": "Damaged screw thread",
+  "label": 1,
+  "assumptions": [
+   "B3",
+   "B6"
+  ],
+  "instances": 221,
+  "instances_first_copy_only": 156
+ },
+ {
+  "id": "damaged_plate_thread",
+  "name": "Damaged plate thread",
+  "label": 4,
+  "assumptions": [
+   "B3",
+   "B6"
+  ],
+  "instances": 3,
+  "instances_first_copy_only": 1
+ },
+ {
+  "id": "missing_screw",
+  "name": "Missing screw",
+  "label": 3,
+  "assumptions": [
+   "B1",
+   "B4",
+   "B5"
+  ],
+  "instances": 218,
+  "instances_first_copy_only": 198
+ }
+]

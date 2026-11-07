@@ -1,0 +1,77 @@
+{
+ "description": "Leave-bearing-out cross-validation: each of the 4 folds holds out one healthy, one outer-ring (KA) and one inner-ring (KI) bearing, so no bearing is seen in training and testing. Measurements with identical signals all belong to one bearing, so they stay together. Value per seed: bearing -> fold.",
+ "folds": 4,
+ "group": "bearing",
+ "seeds": {
+  "0": {
+   "K001": 2,
+   "K002": 0,
+   "K003": 3,
+   "K004": 1,
+   "KA04": 3,
+   "KA15": 2,
+   "KA16": 1,
+   "KA22": 0,
+   "KI04": 1,
+   "KI14": 2,
+   "KI16": 0,
+   "KI18": 3
+  },
+  "1": {
+   "K001": 1,
+   "K002": 2,
+   "K003": 3,
+   "K004": 0,
+   "KA04": 1,
+   "KA15": 3,
+   "KA16": 2,
+   "KA22": 0,
+   "KI04": 0,
+   "KI14": 1,
+   "KI16": 2,
+   "KI18": 3
+  },
+  "2": {
+   "K001": 0,
+   "K002": 3,
+   "K003": 1,
+   "K004": 2,
+   "KA04": 0,
+   "KA15": 1,
+   "KA16": 2,
+   "KA22": 3,
+   "KI04": 2,
+   "KI14": 3,
+   "KI16": 1,
+   "KI18": 0
+  },
+  "3": {
+   "K001": 2,
+   "K002": 1,
+   "K003": 3,
+   "K004": 0,
+   "KA04": 2,
+   "KA15": 1,
+   "KA16": 3,
+   "KA22": 0,
+   "KI04": 3,
+   "KI14": 2,
+   "KI16": 1,
+   "KI18": 0
+  },
+  "4": {
+   "K001": 0,
+   "K002": 1,
+   "K003": 3,
+   "K004": 2,
+   "KA04": 2,
+   "KA15": 0,
+   "KA16": 1,
+   "KA22": 3,
+   "KI04": 1,
+   "KI14": 2,
+   "KI16": 3,
+   "KI18": 0
+  }
+ }
+}

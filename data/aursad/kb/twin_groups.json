@@ -1,0 +1,32 @@
+[
+ {
+  "members": [
+   "normal",
+   "extra_component",
+   "damaged_screw",
+   "damaged_plate_thread"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "seating:early",
+   "seating:late"
+  ],
+  "instances": 1827,
+  "note": "Structural twins from L1 until L2 adds seating:early, seating:late."
+ },
+ {
+  "members": [
+   "damaged_screw",
+   "damaged_plate_thread"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L5",
+  "resolving_rows": [
+   "recurs:at_hole",
+   "recurs:with_screw"
+  ],
+  "instances": 224,
+  "note": "Structural twins from L2 until L5 adds recurs:at_hole, recurs:with_screw. In AURSAD only recurrence at a hole can be checked (pin_to); the screw identity is not recorded, so the resolving evidence is only half observable."
+ }
+]

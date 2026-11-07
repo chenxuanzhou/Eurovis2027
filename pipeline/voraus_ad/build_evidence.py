@@ -1,11 +1,11 @@
 """Copy the SAFEPROCESS 2027 evidence records and write the leave-setting-out splits.
 
 Outputs
-  data/evidence/records_anomalous.json   755 evidence records (schema 0.3), one per anomalous cycle
-  data/evidence/unread_features.json     per-cycle statistics of the channels the retrieval never reads
-  data/evidence/payload_torque.json      carried-payload torque measured from normal cycles
-  data/evidence/SOURCE.json              where the three files came from (repository + commit + sha256)
-  data/splits/leave_setting_out.json     the five grouped 50/50 splits (seeds 0-4) over the 755 cycles
+  data/voraus_ad/evidence/records_anomalous.json   755 evidence records (schema 0.3), one per anomalous cycle
+  data/voraus_ad/evidence/unread_features.json     per-cycle statistics of the channels the retrieval never reads
+  data/voraus_ad/evidence/payload_torque.json      carried-payload torque measured from normal cycles
+  data/voraus_ad/evidence/SOURCE.json              where the three files came from (repository + commit + sha256)
+  data/voraus_ad/splits/leave_setting_out.json     the five grouped 50/50 splits (seeds 0-4) over the 755 cycles
 
 The records are derived data of the SAFEPROCESS 2027 study and are copied byte for
 byte; `cycle_id` equals the voraus-AD `sample` id. The splits reproduce

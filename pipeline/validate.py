@@ -1,120 +1,65 @@
-"""Check every data product against the counts of the voraus-AD paper and the SAFEPROCESS study.
+"""Validate every dataset's products, then the repository-wide rules.
 
-Products that need the raw parquet are reported as PENDING until build_from_raw.py has run.
-Exits with status 1 if any check fails.
+    python pipeline/validate.py              # all datasets
+    python pipeline/validate.py aursad       # one or more datasets by folder name
 
-Run from the repository root:  python pipeline/validate.py
+Each dataset's own checks live in pipeline/<dataset>/validate.py (run here in a subprocess,
+since every dataset folder has its own config module). Repository-wide rules: every committed
+data file stays below the GitHub size limit, and every dataset folder carries a README and a
+licence entry. Exits with status 1 if any check fails.
 """
 from __future__ import annotations
 
-import json
+import subprocess
 import sys
+from pathlib import Path
 
-import pandas as pd
-
-import config as C
-
-FAIL: list[str] = []
-
-
-def check(name: str, ok: bool, detail: str = "") -> None:
-    print(f"[{'ok ' if ok else 'FAIL'}] {name}" + (f"  ({detail})" if detail else ""))
-    if not ok:
-        FAIL.append(name)
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from common.checks import Checker  # noqa: E402
+from common.paths import DATA_ROOT, DATASETS, MAX_FILE_MB, ROOT  # noqa: E402
 
 
-def pending(name: str) -> None:
-    print(f"[PENDING] {name}  (run pipeline/build_from_raw.py with the raw parquet)")
+def committable_files() -> list[Path]:
+    """Data files git would commit (tracked or new, not ignored); every file if git is unavailable."""
+    try:
+        out = subprocess.run(["git", "ls-files", "-co", "--exclude-standard", "--", str(DATA_ROOT)],
+                             cwd=ROOT, capture_output=True, text=True, check=True).stdout
+        return [ROOT / line for line in out.splitlines() if (ROOT / line).is_file()]
+    except (OSError, subprocess.CalledProcessError):
+        return [p for p in DATA_ROOT.rglob("*") if p.is_file()]
 
 
-def file_sizes() -> None:
-    big = [(p.relative_to(C.ROOT), p.stat().st_size / 2**20)
-           for p in C.DATA.rglob("*") if p.is_file() and "raw" not in p.parts]
-    worst = max(big, key=lambda x: x[1])
-    check("every data file below the GitHub limit", worst[1] < C.MAX_FILE_MB,
-          f"largest {worst[0]} = {worst[1]:.1f} MB, total {sum(m for _, m in big):.1f} MB")
-
-
-def catalog() -> None:
-    d = C.DATA / "catalog"
-    n = {f: len(pd.read_csv(d / f)) for f in ("signals.csv", "categories.csv", "variants.csv", "actions.csv")}
-    check("catalog sizes", n == {"signals.csv": 130, "categories.csv": 13, "variants.csv": 77, "actions.csv": 15}, str(n))
-
-
-def evidence_and_splits() -> dict:
-    recs = json.loads((C.DATA / "evidence" / "records_anomalous.json").read_text(encoding="utf-8"))
-    cats = pd.Series([r["detector"]["ground_truth_category"] for r in recs]).value_counts().sort_index()
-    check("755 anomalous evidence records", len(recs) == 755)
-    check("72 anomalous settings", len({r["detector"]["ground_truth_setting"] for r in recs}) == 72)
-    lso = json.loads((C.DATA / "splits" / "leave_setting_out.json").read_text(encoding="utf-8"))
-    ok = all(set(s["fit_settings"]).isdisjoint(s["test_settings"]) and
-             len(s["fit_cycles"]) + len(s["test_cycles"]) == 755 for s in lso["seeds"].values())
-    check("leave-setting-out splits are disjoint by setting and cover all 755 cycles", ok)
-    return cats.to_dict()
-
-
-def kb() -> None:
-    d = C.DATA / "kb"
-    modes = json.loads((d / "failure_modes.json").read_text(encoding="utf-8"))
-    lat = json.loads((d / "refinement_lattice.json").read_text(encoding="utf-8"))
-    check("14 failure modes", len(modes) == 14)
-    l2 = next(lv for lv in lat["levels"] if lv["id"] == "L2")
-    check("4 twin groups in the deployed representation", len(l2["twin_blocks"]) == 4)
-    mono = True
-    for prev, cur in zip(lat["levels"], lat["levels"][1:]):
-        for b, p in zip(cur["blocks"], cur["block_parent"]):
-            mono &= set(b) <= set(prev["blocks"][p])
-    check("each lattice level refines the previous one", mono)
-
-
-def raw_products(cats: dict) -> None:
-    cyc_path = C.DATA / "cycles" / "cycles.parquet"
-    if not cyc_path.exists():
-        for name in ("cycles", "action segments", "normal envelope", "grid500 signals",
-                     "normal test evidence records", "regeneration check"):
-            pending(name)
-        return
-    cyc = pd.read_parquet(cyc_path)
-    check("2122 cycles", len(cyc) == 2122, f"{len(cyc)}")
-    train = cyc[cyc["official_split"] == "train"]
-    check("948 official training cycles, all anomaly-free", len(train) == 948 and not train["anomaly"].any(),
-          f"{len(train)}")
-    test = cyc[cyc["official_split"] == "test"]
-    check("419 anomaly-free and 755 anomalous test cycles",
-          (int((~test["anomaly"]).sum()), int(test["anomaly"].sum())) == (419, 755))
-    raw_cats = cyc[cyc["anomaly"]]["category"].value_counts().sort_index().to_dict()
-    check("anomalous cycles per category match the evidence records", raw_cats == cats)
-
-    env = pd.read_parquet(C.DATA / "envelope" / "normal_envelope_grid500.parquet")
-    check("envelope covers 130 channels x 500 points without gaps",
-          len(env) == 130 * C.GRID_N and not env.isna().any().any())
-    check("envelope scale >= std", bool((env["scale"] >= env["std"] - 1e-6).all()))
-
-    man = json.loads((C.DATA / "signals" / "grid500" / "manifest.json").read_text(encoding="utf-8"))
-    n = 0
-    for name, part in man["parts"].items():
-        df = pd.read_parquet(C.DATA / "signals" / "grid500" / part["file"])
-        n += part["n_cycles"]
-        check(f"grid500 {name}: {part['n_cycles']} cycles x {C.GRID_N} rows, no gaps",
-              len(df) == part["n_cycles"] * C.GRID_N and not df.isna().any().any())
-    check("grid500 holds every test cycle plus the training sample", n == 1174 + man["train_sample"]["n"])
-
-    normal = json.loads((C.DATA / "evidence" / "records_normal_test.json").read_text(encoding="utf-8"))
-    check("419 evidence records for anomaly-free test cycles", len(normal) == 419)
-    reg = json.loads((C.DATA / "evidence" / "regeneration_check.json").read_text(encoding="utf-8"))
-    check("rebuilt anomalous records match the SAFEPROCESS records",
-          reg["n_rebuilt"] == 755 and reg["max_abs_slot_diff"] <= 0.002 and reg["share_same_top5"] >= 0.99,
-          f"max slot diff {reg['max_abs_slot_diff']}, same top-5 {reg['share_same_top5']:.3f}")
+def repository_rules(ck: Checker, chosen: list[str]) -> None:
+    tracked = committable_files()
+    worst = max(tracked, key=lambda p: p.stat().st_size)
+    total = sum(p.stat().st_size for p in tracked) / 2**20
+    ck.check("every data file below the GitHub limit", worst.stat().st_size / 2**20 < MAX_FILE_MB,
+             f"largest {worst.relative_to(ROOT)} = {worst.stat().st_size / 2**20:.1f} MB, total {total:.1f} MB")
+    licence = (DATA_ROOT / "LICENSE.md").read_text(encoding="utf-8")
+    for ds in chosen:
+        d = DATA_ROOT / ds
+        if not d.exists():
+            ck.wait(f"{ds}: data folder", "not built yet")
+            continue
+        ck.check(f"{ds}: README present", (d / "README.md").exists())
+        ck.check(f"{ds}: licence listed in data/LICENSE.md", f"data/{ds}/" in licence)
 
 
 def main() -> None:
-    catalog()
-    cats = evidence_and_splits()
-    kb()
-    raw_products(cats)
-    file_sizes()
-    if FAIL:
-        print(f"\n{len(FAIL)} check(s) failed")
+    chosen = sys.argv[1:] or list(DATASETS)
+    failed = []
+    for ds in chosen:
+        v = HERE / ds / "validate.py"
+        if not v.exists():
+            print(f"\n## {ds}: no validator yet")
+            continue
+        if subprocess.run([sys.executable, str(v)], cwd=ROOT).returncode != 0:
+            failed.append(ds)
+    ck = Checker("repository")
+    repository_rules(ck, chosen)
+    if failed or ck.failed:
+        print(f"\nchecks failed: {failed + ck.failed}")
         sys.exit(1)
     print("\nall checks passed")
 

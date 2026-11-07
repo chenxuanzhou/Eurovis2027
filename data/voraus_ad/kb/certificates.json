@@ -4,7 +4,7 @@
   "commit": "438389f10b034c3b215750b9fd4ca734d72b106c",
   "file": "results/repair_results.json"
  },
- "protocol": "five leave-setting-out splits (data/splits/leave_setting_out.json)",
+ "protocol": "five leave-setting-out splits (data/voraus_ad/splits/leave_setting_out.json)",
  "certificates": {
   "invalidgrip+misgrip": {
    "members": [

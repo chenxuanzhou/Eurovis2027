@@ -1,0 +1,7 @@
+{
+ "P1": "The outer ring is stationary and the inner ring turns with the shaft under a fixed radial load, so an outer-ring defect repeats at BPFO and an inner-ring defect at BPFI, amplitude-modulated at the shaft rate as it passes through the load zone.",
+ "P2": "A raceway defect modulates the motor's air gap and load torque at the defect frequency, which in theory shows as sidebands f_supply +- f_defect in the phase currents.",
+ "P3": "Defect frequencies follow from the fact-sheet geometry: 8 balls of 6.75 mm, pitch circle 28.55 mm (FAG) or 29.05 mm (other makers), contact angle 0.",
+ "P4": "Single pitting, repetitive pitting and particle indentations on the same ring excite the same defect frequency; only an inspection of the raceway (the fact sheet) tells them apart.",
+ "P5": "KI04 and KI14 have inner-ring pitting and outer-ring indentations (fact sheets, damage combination M)."
+}

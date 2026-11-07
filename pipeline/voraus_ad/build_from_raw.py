@@ -1,24 +1,24 @@
 """Derive the cycle-level data products from the raw voraus-AD parquet (100 Hz).
 
-Needs data/raw/voraus-ad-dataset-100hz.parquet (or VORAUS_PARQUET=<path>).
+Needs data/voraus_ad/raw/voraus-ad-dataset-100hz.parquet (or VORAUS_PARQUET=<path>).
 
 Outputs
-  data/cycles/cycles.parquet               one row per cycle (2122): labels, setting, official split,
+  data/voraus_ad/cycles/cycles.parquet               one row per cycle (2122): labels, setting, official split,
                                            duration, sampling, leave-setting-out membership
-  data/cycles/action_segments.parquet      one row per (cycle, action): start/end time and progress
-  data/envelope/normal_envelope_grid500.parquet
+  data/voraus_ad/cycles/action_segments.parquet      one row per (cycle, action): start/end time and progress
+  data/voraus_ad/envelope/normal_envelope_grid500.parquet
                                            per channel (all 130) x 500 progress points: mean, std,
                                            scale (the SAFEPROCESS z denominator), q05/q25/q50/q75/q95,
                                            over the 948 official training cycles (setting PRE_A)
-  data/envelope/normal_phase_grid500.csv   modal action per progress point over the training cycles
-  data/signals/grid500/<part>.parquet      the 1174 test cycles (one part per anomaly category plus
+  data/voraus_ad/envelope/normal_phase_grid500.csv   modal action per progress point over the training cycles
+  data/voraus_ad/signals/grid500/<part>.parquet      the 1174 test cycles (one part per anomaly category plus
                                            normal_test) and a fixed sample of 100 training cycles,
                                            resampled onto the 500-point progress grid for the channels
                                            in config.grid_channels(), plus the action code per point
-  data/signals/grid500/manifest.json       parts, cycles per part, channels, precision
-  data/evidence/records_normal_test.json   evidence records (schema 0.3) for the 419 test cycles
+  data/voraus_ad/signals/grid500/manifest.json       parts, cycles per part, channels, precision
+  data/voraus_ad/evidence/records_normal_test.json   evidence records (schema 0.3) for the 419 test cycles
                                            without an anomaly, built exactly like the anomalous ones
-  data/evidence/regeneration_check.json    the 755 anomalous records rebuilt from raw and compared with
+  data/voraus_ad/evidence/regeneration_check.json    the 755 anomalous records rebuilt from raw and compared with
                                            the copied SAFEPROCESS records
 
 Resampling follows attribution_bridge._resample: time is normalized per cycle to [0, 1]
@@ -41,6 +41,7 @@ import pyarrow.parquet as pq
 
 import config as C  # noqa: I001  (puts pipeline/vendor on sys.path)
 import attribution_bridge as AB
+from common.parquet_io import trim_mantissa
 from voraus_enums import Signals
 
 EPS = AB.EPS
@@ -183,19 +184,6 @@ def build_envelope(raw: Raw, train: list[int], grid: np.ndarray) -> dict:
     return {c: {"mean": mean[idx[c]], "scale": scale[idx[c]]} for c in KB_CHANNELS}
 
 
-def trim_mantissa(x: np.ndarray, keep_bits: int = C.GRID_KEEP_MANTISSA_BITS) -> np.ndarray:
-    """Round float32 values to `keep_bits` mantissa bits (relative error <= 2**-(keep_bits+1)).
-
-    The dropped low bits become zero, which byte_stream_split + zstd compress to almost
-    nothing, so the files shrink to roughly float16 size while staying plain float32
-    (read as is by pandas/pyarrow and DuckDB).
-    """
-    drop = 23 - keep_bits
-    bits = np.ascontiguousarray(x, dtype=np.float32).view(np.uint32)
-    rounded = (bits + np.uint32(1 << (drop - 1))) & np.uint32((0xFFFFFFFF << drop) & 0xFFFFFFFF)
-    return rounded.view(np.float32)
-
-
 def write_part(frames: list[pd.DataFrame], name: str, schema_cols: list[str]) -> dict:
     out = C.DATA / "signals" / "grid500"
     out.mkdir(parents=True, exist_ok=True)
@@ -240,7 +228,7 @@ def build_grid_signals(raw: Raw, cycles: pd.DataFrame, grid: np.ndarray) -> None
         frames = []
         for sid in sorted(members):
             i = pos[sid]
-            f = pd.DataFrame(trim_mantissa(values[i]).T, columns=cols)
+            f = pd.DataFrame(trim_mantissa(values[i], C.GRID_KEEP_MANTISSA_BITS).T, columns=cols)
             f.insert(0, "action", acts[i])
             f.insert(0, "grid_idx", g)
             f.insert(0, "sample", np.int32(sid))
@@ -300,7 +288,7 @@ def build_records(raw: Raw, ref: dict, cycles: pd.DataFrame, grid: np.ndarray) -
 
 def main() -> None:
     if not C.RAW_PARQUET.exists():
-        raise SystemExit(f"raw parquet not found: {C.RAW_PARQUET} (see data/raw/README.md)")
+        raise SystemExit(f"raw parquet not found: {C.RAW_PARQUET} (see data/voraus_ad/raw/README.md)")
     grid = np.linspace(0, 1, C.GRID_N)
     log("reading meta columns")
     raw = Raw()

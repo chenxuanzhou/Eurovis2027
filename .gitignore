@@ -1,6 +1,10 @@
-# raw voraus-AD files are not redistributed (see data/raw/README.md)
-data/raw/*.parquet
-data/raw/*.pkl
+# raw dataset files are not redistributed (see data/<dataset>/raw/README.md)
+data/*/raw/*.parquet
+data/*/raw/*.pkl
+data/*/raw/*.h5
+data/*/raw/*.mat
+data/*/raw/**/*.mat
+data/*/raw/**/*.pdf
 
 __pycache__/
 *.pyc

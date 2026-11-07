@@ -1,0 +1,137 @@
+[
+ {
+  "id": "healthy",
+  "name": "Healthy bearing",
+  "damaged_rings": [],
+  "raceway_geometry": [],
+  "assumptions": [],
+  "bearings": [
+   "K001",
+   "K002",
+   "K003",
+   "K004"
+  ],
+  "folder_classes": [
+   "healthy"
+  ],
+  "instances": 320
+ },
+ {
+  "id": "IR_pitting",
+  "name": "Inner-ring fatigue pitting",
+  "damaged_rings": [
+   "IR"
+  ],
+  "raceway_geometry": [
+   "single_pit"
+  ],
+  "assumptions": [
+   "P1",
+   "P2",
+   "P3"
+  ],
+  "bearings": [
+   "KI16",
+   "KI18"
+  ],
+  "folder_classes": [
+   "IR"
+  ],
+  "instances": 160
+ },
+ {
+  "id": "OR_indentation",
+  "name": "Outer-ring particle indentations",
+  "damaged_rings": [
+   "OR"
+  ],
+  "raceway_geometry": [
+   "indentations"
+  ],
+  "assumptions": [
+   "P1",
+   "P2",
+   "P3",
+   "P4"
+  ],
+  "bearings": [
+   "KA15"
+  ],
+  "folder_classes": [
+   "OR"
+  ],
+  "instances": 80
+ },
+ {
+  "id": "OR_pitting_repetitive",
+  "name": "Outer-ring fatigue pitting (repetitive)",
+  "damaged_rings": [
+   "OR"
+  ],
+  "raceway_geometry": [
+   "repetitive_pits"
+  ],
+  "assumptions": [
+   "P1",
+   "P2",
+   "P3",
+   "P4"
+  ],
+  "bearings": [
+   "KA16"
+  ],
+  "folder_classes": [
+   "OR"
+  ],
+  "instances": 80
+ },
+ {
+  "id": "OR_pitting",
+  "name": "Outer-ring fatigue pitting (single)",
+  "damaged_rings": [
+   "OR"
+  ],
+  "raceway_geometry": [
+   "single_pit"
+  ],
+  "assumptions": [
+   "P1",
+   "P2",
+   "P3"
+  ],
+  "bearings": [
+   "KA04",
+   "KA22"
+  ],
+  "folder_classes": [
+   "OR"
+  ],
+  "instances": 160
+ },
+ {
+  "id": "IR_pitting+OR_indentation",
+  "name": "Inner-ring pitting with outer-ring indentations",
+  "damaged_rings": [
+   "IR",
+   "OR"
+  ],
+  "raceway_geometry": [
+   "indentations",
+   "single_pit"
+  ],
+  "assumptions": [
+   "P1",
+   "P2",
+   "P3",
+   "P5"
+  ],
+  "bearings": [
+   "KI04",
+   "KI14"
+  ],
+  "folder_classes": [
+   "IR"
+  ],
+  "instances": 160
+ }
+]

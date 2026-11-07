@@ -1,0 +1,35 @@
+[
+ {
+  "members": [
+   "IR_pitting",
+   "OR_indentation",
+   "OR_pitting_repetitive",
+   "OR_pitting",
+   "IR_pitting+OR_indentation"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "current:BPFO_sidebands",
+   "current:BPFI_sidebands"
+  ],
+  "instances": 640,
+  "note": "Structural twins from L1 until L2 adds current:BPFO_sidebands, current:BPFI_sidebands."
+ },
+ {
+  "members": [
+   "OR_indentation",
+   "OR_pitting_repetitive",
+   "OR_pitting"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L5",
+  "resolving_rows": [
+   "raceway:single_pit",
+   "raceway:repetitive_pits",
+   "raceway:indentations"
+  ],
+  "instances": 320,
+  "note": "Structural twins from L2 until L5 adds raceway:single_pit, raceway:repetitive_pits, raceway:indentations."
+ }
+]

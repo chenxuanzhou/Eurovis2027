@@ -1,9 +1,9 @@
-"""Write the lookup tables in data/catalog/: signals, categories, variants, actions.
+"""Write the lookup tables in data/voraus_ad/catalog/: signals, categories, variants, actions.
 
 Needs no raw data: everything comes from the official voraus-AD enums
 (vendor/voraus_enums.py), the knowledge base (vendor/line_kg.py) and, for the
 variant -> category map of the anomalous settings, the SAFEPROCESS evidence
-records copied into data/evidence/ by build_evidence.py.
+records copied into data/voraus_ad/evidence/ by build_evidence.py.
 
 Run from the repository root:  python pipeline/build_catalog.py
 """

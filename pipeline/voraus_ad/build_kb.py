@@ -1,6 +1,6 @@
 """Export the FMEA knowledge base as the structural layer of the visual analytics system.
 
-Outputs (data/kb/)
+Outputs (data/voraus_ad/kb/)
   failure_modes.json      the 14 failure modes with scope, manifest families, phase hint,
                           authored physical signature and the voraus-AD category they map to
   fsm_deployed.csv        fault signature matrix of the representation the deployed score
@@ -29,8 +29,9 @@ from collections import Counter
 
 import pandas as pd
 
-import config as C
+import config as C  # noqa: I001  (puts pipeline/ and vendor/ on sys.path)
 import line_kg as KB
+from common.lattice import refinement_lattice
 
 OUT = C.DATA / "kb"
 JOINT_FAMILIES = ("motor_torque", "torque_sensor_a", "joint_velocity", "joint_position")
@@ -114,62 +115,17 @@ def failure_modes() -> list[dict]:
 
 
 def lattice(modes: list[dict], cycles_per_mode: Counter) -> dict:
-    ids = [m["id"] for m in modes]
     fm_of = {fm["id"]: fm for fm in KB.FMEA}
-    cum_rows: list[str] = []
-    cum_col = {i: [] for i in ids}
-    keys = {i: [] for i in ids}
-    level_cols = {}
-    for lid, *_ in LEVELS:
-        cum_rows += rows_for_level(lid)
-        for i in ids:
-            cum_col[i] = cum_col[i] + column(fm_of[i], lid)
-            keys[i].append("".join(map(str, cum_col[i])))
-        level_cols[lid] = {i: list(cum_col[i]) for i in ids}
-    # display order: lexicographic over the cumulative keys keeps every level's blocks contiguous
-    order = sorted(ids, key=lambda i: tuple(keys[i]))
-
-    levels_out = [{
-        "id": "L0", "label": "No evidence", "adds": "nothing", "read_by_deployed_score": True,
-        "rows_added": [], "blocks": [order], "block_parent": [None],
-    }]
-    prev_blocks = [order]
-    for k, (lid, label, adds, deployed) in enumerate(LEVELS):
-        blocks: list[list[str]] = []
-        seen = {}
-        for i in order:
-            key = keys[i][k]
-            if key not in seen:
-                seen[key] = len(blocks)
-                blocks.append([])
-            blocks[seen[key]].append(i)
-        parent = [next(p for p, pb in enumerate(prev_blocks) if b[0] in pb) for b in blocks]
-        col = level_cols[lid]
-        isolable = {a: {b: any(x and not y for x, y in zip(col[a], col[b])) for b in order if b != a}
-                    for a in order}
-        twins = [b for b in blocks if len(b) > 1]
-        nested = [{"inner": a, "outer": b} for a in order for b in order
-                  if a != b and not isolable[a][b] and isolable[b][a]]
-        exposed = sum(cycles_per_mode[i] for b in twins for i in b)
-        levels_out.append({
-            "id": lid, "label": label, "adds": adds, "read_by_deployed_score": deployed,
-            "rows_added": rows_for_level(lid), "blocks": blocks, "block_parent": parent,
-            "n_blocks": len(blocks), "twin_blocks": twins, "nested_pairs": nested,
-            "isolable": isolable,
-            "anomalous_cycles_with_true_mode_in_twin_block": exposed,
-        })
-        prev_blocks = blocks
-    return {
-        "description": "Isolability refinement chain of the FMEA knowledge base. Each level adds evidence "
-                       "rows to the fault signature matrix; blocks are modes with identical cumulative "
-                       "columns (structural twins at that level). isolable[a][b] is true when some row is "
-                       "1 for a and 0 for b. nested_pairs lists one-way pairs (inner is not isolable from "
-                       "outer, outer is isolable from inner).",
-        "modes": order,
-        "mode_category": {i: fm_of[i]["voraus_category"] for i in order},
-        "anomalous_cycles_per_mode": {i: cycles_per_mode[i] for i in order},
-        "levels": levels_out,
-    }
+    levels = [{"id": lid, "label": label, "adds": adds, "read_by_deployed_score": deployed,
+               "rows": rows_for_level(lid)} for lid, label, adds, deployed in LEVELS]
+    columns = {lid: {m["id"]: column(fm_of[m["id"]], lid) for m in modes} for lid, *_ in LEVELS}
+    return refinement_lattice(
+        "voraus_ad", levels, columns, dict(cycles_per_mode),
+        description="Isolability refinement chain of the FMEA knowledge base of the SAFEPROCESS 2027 study. "
+                    "Each level adds evidence rows to the fault signature matrix; blocks are modes with "
+                    "identical cumulative columns (structural twins at that level). The no-fault hypothesis "
+                    "is not part of the problem: diagnosis starts from a detected anomaly.",
+        mode_label={m["id"]: fm_of[m["id"]]["voraus_category"] for m in modes})
 
 
 def fsm_deployed(modes: list[dict]) -> pd.DataFrame:
@@ -187,7 +143,7 @@ def certificates() -> dict:
     return {
         "source": {"repository": "chenxuanzhou/Structural-Non-Isolability-in-Knowledge-Based-Robot-Fault-Diagnosis",
                    "commit": C.SNIS_COMMIT, "file": "results/repair_results.json"},
-        "protocol": "five leave-setting-out splits (data/splits/leave_setting_out.json)",
+        "protocol": "five leave-setting-out splits (data/voraus_ad/splits/leave_setting_out.json)",
         "certificates": r["certificates"],
         "untestable": r["untestable"],
         "leave_setting_out_vs_random": r["leakage_check"]["per_cluster"],
@@ -259,7 +215,7 @@ def main() -> None:
     (OUT / "twin_groups.json").write_text(json.dumps(groups, indent=1, ensure_ascii=False), encoding="utf-8")
     cross_check(lat)
     for lv in lat["levels"]:
-        extra = f", true mode in a twin block: {lv['anomalous_cycles_with_true_mode_in_twin_block']}" if lv["id"] != "L0" else ""
+        extra = f", true mode in a twin block: {lv['instances_with_true_mode_in_twin_block']}" if lv["id"] != "L0" else ""
         print(f"{lv['id']} {lv['label']:22s} blocks={len(lv['blocks']):2d}{extra}")
 
 

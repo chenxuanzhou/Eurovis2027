@@ -1,17 +1,21 @@
-"""Paths and constants shared by every step of the data pipeline."""
+"""Paths and constants of the voraus-AD pipeline."""
 from __future__ import annotations
 
 import os
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-DATA = Path(os.environ.get("EV_DATA_DIR", ROOT / "data"))   # override only for tests
+PIPELINE = Path(__file__).resolve().parents[1]
 VENDOR = Path(__file__).resolve().parent / "vendor"
-if str(VENDOR) not in sys.path:
-    sys.path.insert(0, str(VENDOR))
+for p in (PIPELINE, VENDOR):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
 
-# The raw voraus-AD file is not redistributed (see data/raw/README.md).
+from common.paths import DATA_ROOT, MAX_FILE_MB, ROOT  # noqa: E402,F401
+
+DATA = DATA_ROOT / "voraus_ad"
+
+# The raw voraus-AD file is not redistributed (see data/voraus_ad/raw/README.md).
 RAW_PARQUET = Path(os.environ.get(
     "VORAUS_PARQUET", DATA / "raw" / "voraus-ad-dataset-100hz.parquet"))
 
@@ -27,14 +31,13 @@ GRID_N = 500                  # normalized task-progress grid (same as the SAFEP
 TRAIN_SETTING = 72            # Variant.PRE_A: the 948 anomaly-free training cycles (official split)
 NORMAL_CATEGORY = 12          # Category.NORMAL_OPERATION
 LSO_SEEDS = (0, 1, 2, 3, 4)   # leave-setting-out splits of the SAFEPROCESS 2027 study
-MAX_FILE_MB = 45              # every committed file stays under GitHub's 50 MB warning
-GRID_KEEP_MANTISSA_BITS = 12  # per-cycle grid signals: ~4 significant digits, see build_from_raw.trim_mantissa
+GRID_KEEP_MANTISSA_BITS = 12  # per-cycle grid signals: ~4 significant digits, see common.parquet_io.trim_mantissa
 TRAIN_SAMPLE_N = 100          # training cycles shipped per-cycle (all 948 are summarized in the envelope)
 TRAIN_SAMPLE_SEED = 2027
 
 JOINTS = (1, 2, 3, 4, 5, 6)
 
-# Per-cycle signals kept on the progress grid (data/signals/grid500).
+# Per-cycle signals kept on the progress grid (data/voraus_ad/signals/grid500).
 # The four knowledge-base families per joint plus the two robot-level currents
 # (what the FMEA reads), the two "unread" families the certificates use, and the
 # commanded torque so a command-conditioned residual can be drawn.

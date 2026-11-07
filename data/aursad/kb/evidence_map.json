@@ -1,0 +1,48 @@
+{
+ "torque:not_built": [
+  [
+   "current_torque_max",
+   -1
+  ],
+  [
+   "achieved_torque_final",
+   -1
+  ]
+ ],
+ "seating:early": [
+  [
+   "torque_rise_s",
+   -1
+  ]
+ ],
+ "seating:late": [
+  [
+   "torque_rise_s",
+   1
+  ]
+ ],
+ "wrist:axial_force_low": [
+  [
+   "fz_mean_screw",
+   -1
+  ]
+ ],
+ "wrist:reaction_torque_high": [
+  [
+   "mz_absmax_screw",
+   1
+  ]
+ ],
+ "pickup:skipped": [
+  [
+   "prev_loosen_screw_s",
+   -1
+  ],
+  [
+   "prev_loosen_torque_max",
+   -1
+  ]
+ ],
+ "recurs:at_hole": [],
+ "recurs:with_screw": []
+}

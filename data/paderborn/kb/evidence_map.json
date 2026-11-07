@@ -1,0 +1,32 @@
+{
+ "current:changed": [
+  "cur1_rms",
+  "cur2_rms"
+ ],
+ "current:BPFO_sidebands": [
+  "cur_BPFO_sb_dB"
+ ],
+ "current:BPFI_sidebands": [
+  "cur_BPFI_sb_dB"
+ ],
+ "vibration:impulsive": [
+  "vib_kurtosis",
+  "vib_crest",
+  "vib_rms"
+ ],
+ "envelope:BPFO": [
+  "env_BPFO_dB",
+  "env_BPFO2_dB"
+ ],
+ "envelope:BPFI": [
+  "env_BPFI_dB",
+  "env_BPFI2_dB"
+ ],
+ "envelope:BPFI_shaft_sidebands": [
+  "env_BPFI-fr_dB",
+  "env_BPFI+fr_dB"
+ ],
+ "raceway:single_pit": [],
+ "raceway:repetitive_pits": [],
+ "raceway:indentations": []
+}

@@ -1,0 +1,35 @@
+{
+ "samples": 4094,
+ "tightening": 2045,
+ "loosening": 2049,
+ "distinct_signal_blocks": 3127,
+ "distinct_tightening": 1561,
+ "samples_in_duplicate_groups": 1934,
+ "duplicate_groups": 967,
+ "duplicate_groups_with_conflicting_labels": 61,
+ "conflicting_label_sets": {
+  "0|1": 30,
+  "0|2": 17,
+  "0|3": 7,
+  "0|4": 1,
+  "1|2": 4,
+  "1|3": 2
+ },
+ "recording_runs": 40,
+ "sessions": 30,
+ "tightening_per_label": {
+  "normal": 1420,
+  "damaged_screw": 221,
+  "extra_component": 183,
+  "missing_screw": 218,
+  "damaged_plate_thread": 3
+ },
+ "distinct_tightening_per_label_of_first_copy": {
+  "normal": 1113,
+  "damaged_screw": 156,
+  "extra_component": 93,
+  "missing_screw": 198,
+  "damaged_plate_thread": 1
+ },
+ "note": "Copies are byte-identical in all 125 sensor columns and timestamps; they come from recording segments that appear twice in AURSAD.h5. Copies with different labels cannot both be right."
+}

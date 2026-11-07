@@ -1,0 +1,13 @@
+bearing,folder_class,mode,manufacturer,damage
+K001,healthy,healthy,IBU,"run-in > 50 h at 1000-3000 N, 1500-2000 rpm"
+K002,healthy,healthy,IBU,"run-in 19 h at 3000 N, 2900 rpm"
+K003,healthy,healthy,IBU,"run-in 1 h at 3000 N, 3000 rpm"
+K004,healthy,healthy,IBU,"run-in 5 h at 3000 N, 3000 rpm"
+KA04,OR,OR_pitting,FAG,"fatigue pitting, single, 2 x 3 mm, lifetime test 12:01 h"
+KA15,OR,OR_indentation,FAG,"plastic deformation by particles, single, < 1 x < 1 mm, lifetime test 6:01 h"
+KA16,OR,OR_pitting_repetitive,MTK,"fatigue pitting, two repetitive random pits (2 and 3 mm long), lifetime test 9:01 h"
+KA22,OR,OR_pitting,IBU/IBB,"fatigue pitting, single, < 2 x 1 mm, lifetime test 14:01 h"
+KI04,IR,IR_pitting+OR_indentation,MTK,"IR fatigue pitting 2 x 1 mm plus OR plastic deformation (multiple damage), lifetime test 12:01 h"
+KI14,IR,IR_pitting+OR_indentation,MTK,"IR fatigue pitting 1 x 1 mm plus OR plastic deformation 1 x 1 mm (multiple damage), lifetime test 21:01 h"
+KI16,IR,IR_pitting,FAG,"IR fatigue pitting, single, 6 mm long across the raceway, lifetime test 3:01 h"
+KI18,IR,IR_pitting,MTK,"IR fatigue pitting, single, 2.5 mm long across the raceway, lifetime test 7:01 h"

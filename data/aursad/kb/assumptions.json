@@ -1,0 +1,8 @@
+{
+ "B1": "The screwdriver runs to a target torque (0.5 N m in the data); torque builds up only when the screw head seats, so without a screw it never builds up.",
+ "B2": "An extra washer adds thickness under the head, so the screw seats after fewer turns and the torque rises earlier; the tightening otherwise completes normally.",
+ "B3": "A damaged thread (filed screw, or filed/chipped hole) changes engagement and rundown friction, so seating can come earlier or later, and the screw can jam, raising the reaction torque at the wrist.",
+ "B4": "Without a screw nothing engages the thread, so the axial force the robot feels while screwing is lower.",
+ "B5": "Missing screws were mostly produced by skipping the pick-up (the robot waits 50 ms instead of loosening a screw), which shows in the loosening sample that precedes the tightening.",
+ "B6": "A damaged screw travels with that screw while a damaged hole stays at its pin, so recurrence over cycles tells them apart. AURSAD records the pin but not the screw identity, so recurrence with a screw cannot be observed in the data."
+}

@@ -1,0 +1,9 @@
+level,symptom,normal,extra_component,damaged_screw,damaged_plate_thread,missing_screw
+L1,torque:not_built,0,0,0,0,1
+L2,seating:early,0,1,1,1,0
+L2,seating:late,0,0,1,1,0
+L3,wrist:axial_force_low,0,0,0,0,1
+L3,wrist:reaction_torque_high,0,0,1,1,0
+L4,pickup:skipped,0,0,0,0,1
+L5,recurs:at_hole,0,0,0,1,0
+L5,recurs:with_screw,0,0,1,0,0

@@ -1,0 +1,236 @@
+[
+ {
+  "members": [
+   "LP5/normal",
+   "LP5/bottom_obstruction",
+   "LP5/bottom_collision",
+   "LP5/collision_in_part",
+   "LP5/collision_in_tool"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "load_change"
+  ],
+  "instances": 164,
+  "problem": "LP5",
+  "note": "Structural twins from L1 until L2 adds load_change."
+ },
+ {
+  "members": [
+   "LP4/normal",
+   "LP4/obstruction",
+   "LP4/collision"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "load_change"
+  ],
+  "instances": 117,
+  "problem": "LP4",
+  "note": "Structural twins from L1 until L2 adds load_change."
+ },
+ {
+  "members": [
+   "LP3/ok",
+   "LP3/slightly_moved",
+   "LP3/moved",
+   "LP3/lost"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "load_change"
+  ],
+  "instances": 47,
+  "problem": "LP3",
+  "note": "Structural twins from L1 until L2 adds load_change."
+ },
+ {
+  "members": [
+   "LP2/normal",
+   "LP2/right_collision",
+   "LP2/left_collision",
+   "LP2/back_collision",
+   "LP2/front_collision"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "load_change"
+  ],
+  "instances": 47,
+  "problem": "LP2",
+  "note": "Structural twins from L1 until L2 adds load_change."
+ },
+ {
+  "members": [
+   "LP1/normal",
+   "LP1/obstruction",
+   "LP1/front_collision",
+   "LP1/collision"
+  ],
+  "twins_from": "L1",
+  "resolved_at": "L2",
+  "resolving_rows": [
+   "load_change"
+  ],
+  "instances": 88,
+  "problem": "LP1",
+  "note": "Structural twins from L1 until L2 adds load_change."
+ },
+ {
+  "members": [
+   "LP5/bottom_obstruction",
+   "LP5/bottom_collision",
+   "LP5/collision_in_part",
+   "LP5/collision_in_tool"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L3",
+  "resolving_rows": [
+   "axis:front_back",
+   "axis:left_right"
+  ],
+  "instances": 120,
+  "problem": "LP5",
+  "note": "Structural twins from L2 until L3 adds axis:front_back, axis:left_right."
+ },
+ {
+  "members": [
+   "LP4/obstruction",
+   "LP4/collision"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L3",
+  "resolving_rows": [
+   "axis:front_back",
+   "axis:left_right"
+  ],
+  "instances": 93,
+  "problem": "LP4",
+  "note": "Structural twins from L2 until L3 adds axis:front_back, axis:left_right."
+ },
+ {
+  "members": [
+   "LP3/slightly_moved",
+   "LP3/moved",
+   "LP3/lost"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L3",
+  "resolving_rows": [
+   "axis:vertical"
+  ],
+  "instances": 27,
+  "problem": "LP3",
+  "note": "Structural twins from L2 until L3 adds axis:vertical."
+ },
+ {
+  "members": [
+   "LP2/right_collision",
+   "LP2/left_collision",
+   "LP2/back_collision",
+   "LP2/front_collision"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L3",
+  "resolving_rows": [
+   "axis:front_back",
+   "axis:left_right"
+  ],
+  "instances": 27,
+  "problem": "LP2",
+  "note": "Structural twins from L2 until L3 adds axis:front_back, axis:left_right."
+ },
+ {
+  "members": [
+   "LP1/obstruction",
+   "LP1/front_collision",
+   "LP1/collision"
+  ],
+  "twins_from": "L2",
+  "resolved_at": "L3",
+  "resolving_rows": [
+   "axis:front_back",
+   "axis:left_right",
+   "axis:vertical"
+  ],
+  "instances": 67,
+  "problem": "LP1",
+  "note": "Structural twins from L2 until L3 adds axis:front_back, axis:left_right, axis:vertical."
+ },
+ {
+  "members": [
+   "LP5/bottom_obstruction",
+   "LP5/bottom_collision"
+  ],
+  "twins_from": "L3",
+  "resolved_at": "L6",
+  "resolving_rows": [
+   "time:transient",
+   "time:sustained"
+  ],
+  "instances": 47,
+  "problem": "LP5",
+  "note": "Structural twins from L3 until L6 adds time:transient, time:sustained."
+ },
+ {
+  "members": [
+   "LP5/collision_in_part",
+   "LP5/collision_in_tool"
+  ],
+  "twins_from": "L3",
+  "resolved_at": "L5",
+  "resolving_rows": [
+   "contact:tool",
+   "contact:part"
+  ],
+  "instances": 73,
+  "problem": "LP5",
+  "note": "Structural twins from L3 until L5 adds contact:tool, contact:part."
+ },
+ {
+  "members": [
+   "LP3/slightly_moved",
+   "LP3/moved"
+  ],
+  "twins_from": "L3",
+  "resolved_at": null,
+  "resolving_rows": [],
+  "instances": 24,
+  "problem": "LP3",
+  "note": "No level of the knowledge base separates these modes: they differ only in magnitude (A5), so only a quantitative threshold learned from data can tell them apart."
+ },
+ {
+  "members": [
+   "LP2/right_collision",
+   "LP2/left_collision"
+  ],
+  "twins_from": "L3",
+  "resolved_at": "L4",
+  "resolving_rows": [
+   "push_from:left",
+   "push_from:right"
+  ],
+  "instances": 14,
+  "problem": "LP2",
+  "note": "Structural twins from L3 until L4 adds push_from:left, push_from:right."
+ },
+ {
+  "members": [
+   "LP2/back_collision",
+   "LP2/front_collision"
+  ],
+  "twins_from": "L3",
+  "resolved_at": "L4",
+  "resolving_rows": [
+   "push_from:front",
+   "push_from:back"
+  ],
+  "instances": 13,
+  "problem": "LP2",
+  "note": "Structural twins from L3 until L4 adds push_from:front, push_from:back."
+ }
+]

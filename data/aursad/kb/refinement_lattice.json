@@ -1,0 +1,563 @@
+{
+ "schema": "refinement-lattice/1",
+ "dataset": "aursad",
+ "description": "Isolability refinement chain of the symptom model authored for AURSAD (pipeline/aursad/kb_spec.py). Instances are tightening samples as labelled in AURSAD.h5, duplicates included. Normal tightening is part of the hypothesis set (null_modes).",
+ "modes": [
+  "normal",
+  "extra_component",
+  "damaged_screw",
+  "damaged_plate_thread",
+  "missing_screw"
+ ],
+ "mode_label": {
+  "normal": 0,
+  "extra_component": 2,
+  "damaged_screw": 1,
+  "damaged_plate_thread": 4,
+  "missing_screw": 3
+ },
+ "null_modes": [
+  "normal"
+ ],
+ "instances_per_mode": {
+  "normal": 1420,
+  "extra_component": 183,
+  "damaged_screw": 221,
+  "damaged_plate_thread": 3,
+  "missing_screw": 218
+ },
+ "levels": [
+  {
+   "id": "L0",
+   "label": "No evidence",
+   "adds": "nothing",
+   "read_by_deployed_score": true,
+   "rows_added": [],
+   "blocks": [
+    [
+     "normal",
+     "extra_component",
+     "damaged_screw",
+     "damaged_plate_thread",
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    null
+   ],
+   "n_blocks": 1,
+   "twin_blocks": [
+    [
+     "normal",
+     "extra_component",
+     "damaged_screw",
+     "damaged_plate_thread",
+     "missing_screw"
+    ]
+   ],
+   "nested_pairs": [],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "damaged_screw": {
+     "normal": false,
+     "extra_component": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "damaged_plate_thread": {
+     "normal": false,
+     "extra_component": false,
+     "damaged_screw": false,
+     "missing_screw": false
+    },
+    "missing_screw": {
+     "normal": false,
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 2045
+  },
+  {
+   "id": "L1",
+   "label": "Screwdriver torque",
+   "adds": "whether the torque builds up",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "torque:not_built"
+   ],
+   "blocks": [
+    [
+     "normal",
+     "extra_component",
+     "damaged_screw",
+     "damaged_plate_thread"
+    ],
+    [
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0
+   ],
+   "n_blocks": 2,
+   "twin_blocks": [
+    [
+     "normal",
+     "extra_component",
+     "damaged_screw",
+     "damaged_plate_thread"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "normal",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "damaged_screw",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "damaged_plate_thread",
+     "outer": "missing_screw"
+    }
+   ],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "damaged_screw": {
+     "normal": false,
+     "extra_component": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "damaged_plate_thread": {
+     "normal": false,
+     "extra_component": false,
+     "damaged_screw": false,
+     "missing_screw": false
+    },
+    "missing_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "damaged_plate_thread": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 1827
+  },
+  {
+   "id": "L2",
+   "label": "+ seating time",
+   "adds": "torque rises earlier or later than a normal rundown",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "seating:early",
+    "seating:late"
+   ],
+   "blocks": [
+    [
+     "normal"
+    ],
+    [
+     "extra_component"
+    ],
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ],
+    [
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "normal",
+     "outer": "extra_component"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_plate_thread"
+    },
+    {
+     "inner": "normal",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_plate_thread"
+    }
+   ],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": true,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_plate_thread": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": false,
+     "missing_screw": true
+    },
+    "missing_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "damaged_plate_thread": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 224
+  },
+  {
+   "id": "L3",
+   "label": "+ wrist reaction",
+   "adds": "axial force and reaction torque while screwing",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "wrist:axial_force_low",
+    "wrist:reaction_torque_high"
+   ],
+   "blocks": [
+    [
+     "normal"
+    ],
+    [
+     "extra_component"
+    ],
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ],
+    [
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "normal",
+     "outer": "extra_component"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_plate_thread"
+    },
+    {
+     "inner": "normal",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_plate_thread"
+    }
+   ],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": true,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_plate_thread": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": false,
+     "missing_screw": true
+    },
+    "missing_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "damaged_plate_thread": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 224
+  },
+  {
+   "id": "L4",
+   "label": "+ preceding pick-up",
+   "adds": "the loosening sample before the tightening",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "pickup:skipped"
+   ],
+   "blocks": [
+    [
+     "normal"
+    ],
+    [
+     "extra_component"
+    ],
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ],
+    [
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "damaged_screw",
+     "damaged_plate_thread"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "normal",
+     "outer": "extra_component"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_plate_thread"
+    },
+    {
+     "inner": "normal",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_plate_thread"
+    }
+   ],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": true,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_plate_thread": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": false,
+     "missing_screw": true
+    },
+    "missing_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "damaged_plate_thread": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 224
+  },
+  {
+   "id": "L5",
+   "label": "+ history",
+   "adds": "recurrence of the fault at a hole or with a screw",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "recurs:at_hole",
+    "recurs:with_screw"
+   ],
+   "blocks": [
+    [
+     "normal"
+    ],
+    [
+     "extra_component"
+    ],
+    [
+     "damaged_screw"
+    ],
+    [
+     "damaged_plate_thread"
+    ],
+    [
+     "missing_screw"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    2,
+    3
+   ],
+   "n_blocks": 5,
+   "twin_blocks": [],
+   "nested_pairs": [
+    {
+     "inner": "normal",
+     "outer": "extra_component"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "normal",
+     "outer": "damaged_plate_thread"
+    },
+    {
+     "inner": "normal",
+     "outer": "missing_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_screw"
+    },
+    {
+     "inner": "extra_component",
+     "outer": "damaged_plate_thread"
+    }
+   ],
+   "isolable": {
+    "normal": {
+     "extra_component": false,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": false
+    },
+    "extra_component": {
+     "normal": true,
+     "damaged_screw": false,
+     "damaged_plate_thread": false,
+     "missing_screw": true
+    },
+    "damaged_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_plate_thread": true,
+     "missing_screw": true
+    },
+    "damaged_plate_thread": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "missing_screw": true
+    },
+    "missing_screw": {
+     "normal": true,
+     "extra_component": true,
+     "damaged_screw": true,
+     "damaged_plate_thread": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 0
+  }
+ ]
+}

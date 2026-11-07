@@ -1,0 +1,702 @@
+{
+ "schema": "refinement-lattice/1",
+ "dataset": "paderborn",
+ "description": "Isolability refinement chain of the symptom model authored for the Paderborn subset (pipeline/paderborn/kb_spec.py). Instances are measurements (80 per bearing). The healthy bearing is part of the hypothesis set (null_modes).",
+ "modes": [
+  "healthy",
+  "IR_pitting",
+  "OR_indentation",
+  "OR_pitting_repetitive",
+  "OR_pitting",
+  "IR_pitting+OR_indentation"
+ ],
+ "mode_label": {
+  "healthy": "K001/K002/K003/K004",
+  "IR_pitting": "KI16/KI18",
+  "OR_indentation": "KA15",
+  "OR_pitting_repetitive": "KA16",
+  "OR_pitting": "KA04/KA22",
+  "IR_pitting+OR_indentation": "KI04/KI14"
+ },
+ "null_modes": [
+  "healthy"
+ ],
+ "instances_per_mode": {
+  "healthy": 320,
+  "IR_pitting": 160,
+  "OR_indentation": 80,
+  "OR_pitting_repetitive": 80,
+  "OR_pitting": 160,
+  "IR_pitting+OR_indentation": 160
+ },
+ "levels": [
+  {
+   "id": "L0",
+   "label": "No evidence",
+   "adds": "nothing",
+   "read_by_deployed_score": true,
+   "rows_added": [],
+   "blocks": [
+    [
+     "healthy",
+     "IR_pitting",
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting",
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    null
+   ],
+   "n_blocks": 1,
+   "twin_blocks": [
+    [
+     "healthy",
+     "IR_pitting",
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting",
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "nested_pairs": [],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": false,
+     "IR_pitting": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": false,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting": {
+     "healthy": false,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": false,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 960
+  },
+  {
+   "id": "L1",
+   "label": "Drive current",
+   "adds": "any change of the phase-current signal",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "current:changed"
+   ],
+   "blocks": [
+    [
+     "healthy"
+    ],
+    [
+     "IR_pitting",
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting",
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    0,
+    0
+   ],
+   "n_blocks": 2,
+   "twin_blocks": [
+    [
+     "IR_pitting",
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting",
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_indentation"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting_repetitive"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting+OR_indentation"
+    }
+   ],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": true,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": true,
+     "IR_pitting": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": true,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting": {
+     "healthy": true,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": true,
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 640
+  },
+  {
+   "id": "L2",
+   "label": "+ current sidebands",
+   "adds": "sidebands at f_supply +- BPFO / BPFI",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "current:BPFO_sidebands",
+    "current:BPFI_sidebands"
+   ],
+   "blocks": [
+    [
+     "healthy"
+    ],
+    [
+     "IR_pitting"
+    ],
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ],
+    [
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    1,
+    1
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_indentation"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting_repetitive"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "IR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_indentation",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting_repetitive",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    }
+   ],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 320
+  },
+  {
+   "id": "L3",
+   "label": "+ vibration",
+   "adds": "impulsive vibration at the bearing housing",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "vibration:impulsive"
+   ],
+   "blocks": [
+    [
+     "healthy"
+    ],
+    [
+     "IR_pitting"
+    ],
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ],
+    [
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_indentation"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting_repetitive"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "IR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_indentation",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting_repetitive",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    }
+   ],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 320
+  },
+  {
+   "id": "L4",
+   "label": "+ envelope spectrum",
+   "adds": "envelope lines at BPFO, BPFI and shaft-rate sidebands of BPFI",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "envelope:BPFO",
+    "envelope:BPFI",
+    "envelope:BPFI_shaft_sidebands"
+   ],
+   "blocks": [
+    [
+     "healthy"
+    ],
+    [
+     "IR_pitting"
+    ],
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ],
+    [
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_blocks": 4,
+   "twin_blocks": [
+    [
+     "OR_indentation",
+     "OR_pitting_repetitive",
+     "OR_pitting"
+    ]
+   ],
+   "nested_pairs": [
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_indentation"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting_repetitive"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "IR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_indentation",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting_repetitive",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    }
+   ],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 320
+  },
+  {
+   "id": "L5",
+   "label": "+ raceway inspection",
+   "adds": "damage geometry from the fact sheet",
+   "read_by_deployed_score": null,
+   "rows_added": [
+    "raceway:single_pit",
+    "raceway:repetitive_pits",
+    "raceway:indentations"
+   ],
+   "blocks": [
+    [
+     "healthy"
+    ],
+    [
+     "IR_pitting"
+    ],
+    [
+     "OR_indentation"
+    ],
+    [
+     "OR_pitting_repetitive"
+    ],
+    [
+     "OR_pitting"
+    ],
+    [
+     "IR_pitting+OR_indentation"
+    ]
+   ],
+   "block_parent": [
+    0,
+    1,
+    2,
+    2,
+    2,
+    3
+   ],
+   "n_blocks": 6,
+   "twin_blocks": [],
+   "nested_pairs": [
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_indentation"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting_repetitive"
+    },
+    {
+     "inner": "healthy",
+     "outer": "OR_pitting"
+    },
+    {
+     "inner": "healthy",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "IR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_indentation",
+     "outer": "IR_pitting+OR_indentation"
+    },
+    {
+     "inner": "OR_pitting",
+     "outer": "IR_pitting+OR_indentation"
+    }
+   ],
+   "isolable": {
+    "healthy": {
+     "IR_pitting": false,
+     "OR_indentation": false,
+     "OR_pitting_repetitive": false,
+     "OR_pitting": false,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting": {
+     "healthy": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "OR_pitting_repetitive": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting": true,
+     "IR_pitting+OR_indentation": true
+    },
+    "OR_pitting": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "IR_pitting+OR_indentation": false
+    },
+    "IR_pitting+OR_indentation": {
+     "healthy": true,
+     "IR_pitting": true,
+     "OR_indentation": true,
+     "OR_pitting_repetitive": true,
+     "OR_pitting": true
+    }
+   },
+   "instances_with_true_mode_in_twin_block": 0
+  }
+ ]
+}

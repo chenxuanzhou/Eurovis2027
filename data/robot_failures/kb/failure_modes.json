@@ -1,0 +1,418 @@
+[
+ {
+  "id": "LP5/normal",
+  "problem": "LP5",
+  "problem_description": "failures in motion with part",
+  "label": "normal",
+  "name": "Normal motion with part",
+  "kind": "normal",
+  "push_from_or_payload": [],
+  "contact": [],
+  "time_course": null,
+  "assumptions": [],
+  "instances": 44
+ },
+ {
+  "id": "LP5/bottom_obstruction",
+  "problem": "LP5",
+  "problem_description": "failures in motion with part",
+  "label": "bottom_obstruction",
+  "name": "Bottom obstruction while moving the part",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "below"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 21
+ },
+ {
+  "id": "LP5/bottom_collision",
+  "problem": "LP5",
+  "problem_description": "failures in motion with part",
+  "label": "bottom_collision",
+  "name": "Bottom collision while moving the part",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "below"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 26
+ },
+ {
+  "id": "LP5/collision_in_part",
+  "problem": "LP5",
+  "problem_description": "failures in motion with part",
+  "label": "collision_in_part",
+  "name": "Collision on the carried part",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "above",
+   "back",
+   "below",
+   "front",
+   "left",
+   "right"
+  ],
+  "contact": [
+   "part"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A3",
+   "A4",
+   "A6"
+  ],
+  "instances": 47
+ },
+ {
+  "id": "LP5/collision_in_tool",
+  "problem": "LP5",
+  "problem_description": "failures in motion with part",
+  "label": "collision_in_tool",
+  "name": "Collision on the tool",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "above",
+   "back",
+   "below",
+   "front",
+   "left",
+   "right"
+  ],
+  "contact": [
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A3",
+   "A4",
+   "A6"
+  ],
+  "instances": 26
+ },
+ {
+  "id": "LP4/normal",
+  "problem": "LP4",
+  "problem_description": "failures in approach to ungrasp position",
+  "label": "normal",
+  "name": "Normal approach to ungrasp",
+  "kind": "normal",
+  "push_from_or_payload": [],
+  "contact": [],
+  "time_course": null,
+  "assumptions": [],
+  "instances": 24
+ },
+ {
+  "id": "LP4/obstruction",
+  "problem": "LP4",
+  "problem_description": "failures in approach to ungrasp position",
+  "label": "obstruction",
+  "name": "Obstruction of the approach to ungrasp",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "below"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A1",
+   "A2",
+   "A6"
+  ],
+  "instances": 21
+ },
+ {
+  "id": "LP4/collision",
+  "problem": "LP4",
+  "problem_description": "failures in approach to ungrasp position",
+  "label": "collision",
+  "name": "Collision during approach to ungrasp (side unspecified)",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "above",
+   "back",
+   "below",
+   "front",
+   "left",
+   "right"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A3",
+   "A6"
+  ],
+  "instances": 72
+ },
+ {
+  "id": "LP3/ok",
+  "problem": "LP3",
+  "problem_description": "position of part after a transfer failure",
+  "label": "ok",
+  "name": "Part still held correctly",
+  "kind": "normal",
+  "push_from_or_payload": [],
+  "contact": [],
+  "time_course": null,
+  "assumptions": [],
+  "instances": 20
+ },
+ {
+  "id": "LP3/slightly_moved",
+  "problem": "LP3",
+  "problem_description": "position of part after a transfer failure",
+  "label": "slightly_moved",
+  "name": "Part slightly moved in the gripper",
+  "kind": "payload",
+  "push_from_or_payload": [],
+  "contact": [
+   "shift"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A5",
+   "A6"
+  ],
+  "instances": 9
+ },
+ {
+  "id": "LP3/moved",
+  "problem": "LP3",
+  "problem_description": "position of part after a transfer failure",
+  "label": "moved",
+  "name": "Part moved in the gripper",
+  "kind": "payload",
+  "push_from_or_payload": [],
+  "contact": [
+   "shift"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A5",
+   "A6"
+  ],
+  "instances": 15
+ },
+ {
+  "id": "LP3/lost",
+  "problem": "LP3",
+  "problem_description": "position of part after a transfer failure",
+  "label": "lost",
+  "name": "Part lost",
+  "kind": "payload",
+  "push_from_or_payload": [
+   "lighter"
+  ],
+  "contact": [
+   "shift"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A6"
+  ],
+  "instances": 3
+ },
+ {
+  "id": "LP2/normal",
+  "problem": "LP2",
+  "problem_description": "failures in transfer of a part",
+  "label": "normal",
+  "name": "Normal transfer",
+  "kind": "normal",
+  "push_from_or_payload": [],
+  "contact": [],
+  "time_course": null,
+  "assumptions": [],
+  "instances": 20
+ },
+ {
+  "id": "LP2/right_collision",
+  "problem": "LP2",
+  "problem_description": "failures in transfer of a part",
+  "label": "right_col",
+  "name": "Collision on the right during transfer",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "right"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 5
+ },
+ {
+  "id": "LP2/left_collision",
+  "problem": "LP2",
+  "problem_description": "failures in transfer of a part",
+  "label": "left_col",
+  "name": "Collision on the left during transfer",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "left"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 9
+ },
+ {
+  "id": "LP2/back_collision",
+  "problem": "LP2",
+  "problem_description": "failures in transfer of a part",
+  "label": "back_col",
+  "name": "Back collision during transfer",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "back"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 7
+ },
+ {
+  "id": "LP2/front_collision",
+  "problem": "LP2",
+  "problem_description": "failures in transfer of a part",
+  "label": "front_col",
+  "name": "Front collision during transfer",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "front"
+  ],
+  "contact": [
+   "part",
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 6
+ },
+ {
+  "id": "LP1/normal",
+  "problem": "LP1",
+  "problem_description": "failures in approach to grasp position",
+  "label": "normal",
+  "name": "Normal approach to grasp",
+  "kind": "normal",
+  "push_from_or_payload": [],
+  "contact": [],
+  "time_course": null,
+  "assumptions": [],
+  "instances": 21
+ },
+ {
+  "id": "LP1/obstruction",
+  "problem": "LP1",
+  "problem_description": "failures in approach to grasp position",
+  "label": "obstruction",
+  "name": "Obstruction of the approach",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "below"
+  ],
+  "contact": [
+   "tool"
+  ],
+  "time_course": "sustained",
+  "assumptions": [
+   "A1",
+   "A2",
+   "A6"
+  ],
+  "instances": 34
+ },
+ {
+  "id": "LP1/front_collision",
+  "problem": "LP1",
+  "problem_description": "failures in approach to grasp position",
+  "label": "fr_collision",
+  "name": "Front collision during approach",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "front"
+  ],
+  "contact": [
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A6"
+  ],
+  "instances": 16
+ },
+ {
+  "id": "LP1/collision",
+  "problem": "LP1",
+  "problem_description": "failures in approach to grasp position",
+  "label": "collision",
+  "name": "Collision during approach (side unspecified)",
+  "kind": "contact",
+  "push_from_or_payload": [
+   "above",
+   "back",
+   "below",
+   "front",
+   "left",
+   "right"
+  ],
+  "contact": [
+   "tool"
+  ],
+  "time_course": "transient",
+  "assumptions": [
+   "A2",
+   "A3",
+   "A6"
+  ],
+  "instances": 17
+ }
+]

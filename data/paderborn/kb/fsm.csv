@@ -1,0 +1,11 @@
+level,symptom,healthy,IR_pitting,OR_indentation,OR_pitting_repetitive,OR_pitting,IR_pitting+OR_indentation
+L1,current:changed,0,1,1,1,1,1
+L2,current:BPFO_sidebands,0,0,1,1,1,1
+L2,current:BPFI_sidebands,0,1,0,0,0,1
+L3,vibration:impulsive,0,1,1,1,1,1
+L4,envelope:BPFO,0,0,1,1,1,1
+L4,envelope:BPFI,0,1,0,0,0,1
+L4,envelope:BPFI_shaft_sidebands,0,1,0,0,0,1
+L5,raceway:single_pit,0,1,0,0,1,1
+L5,raceway:repetitive_pits,0,0,0,1,0,0
+L5,raceway:indentations,0,0,1,0,0,1

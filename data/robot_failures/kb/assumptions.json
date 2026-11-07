@@ -1,0 +1,8 @@
+{
+ "A1": "Approach motions (LP1, LP4) end with a vertical descent, so a blocked approach (obstruction) loads the wrist from below.",
+ "A2": "No part is held while approaching the grasp position (LP1); a part is held in LP2-LP5.",
+ "A3": "A class named only 'collision' does not fix the side of contact: any side is possible, including the side of a more specific class of the same problem.",
+ "A4": "Contact on the carried part acts at a longer moment arm from the wrist sensor than contact on the tool, so the torque-to-force ratio tells the two apart.",
+ "A5": "'moved' and 'slightly_moved' (LP3) describe the same physical change, a shift of the part in the gripper, at different magnitudes.",
+ "A6": "Collisions are impacts (force rises, then decays within the window); obstructions block the motion (force persists or grows); a changed payload is a static change."
+}
