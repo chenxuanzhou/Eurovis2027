@@ -1,7 +1,0 @@
-numpy>=1.26
-pandas>=2.1
-pyarrow>=15
-networkx>=3.0
-# only for re-extracting from the raw files (pipeline/<dataset>/extract.py)
-scipy>=1.10
-h5py>=3.8

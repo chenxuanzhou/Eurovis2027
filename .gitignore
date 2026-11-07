@@ -11,3 +11,8 @@ __pycache__/
 .venv/
 .ipynb_checkpoints/
 .DS_Store
+
+# processing code stays local (not published)
+pipeline/
+requirements.txt
+results/

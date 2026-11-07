@@ -1,8 +1,7 @@
 # EuroVis 2027 — data for visual analytics of fault diagnosis
 
-Data and processing code for a EuroVis 2027 full-paper project on interactive visual analytics of fault
-diagnosis for industrial robots. Four public datasets are prepared the same way, so the same views can
-run on each:
+Data for a EuroVis 2027 full-paper project on interactive visual analytics of fault diagnosis for
+industrial robots. Four public datasets are prepared the same way, so the same views can run on each:
 
 | Dataset | System | Folder |
 |---|---|---|
@@ -16,42 +15,15 @@ The voraus-AD knowledge base and evidence records come from the SAFEPROCESS 2027
 the knowledge bases of the other three were authored for this repository in the same schema.
 
 `data/README.md` explains the shared conventions (knowledge-base schema, evidence, splits, duplicates);
-each dataset folder documents its files. **Status:** all products are built (86 MB) and pass
-`pipeline/validate.py`. Rebuilt from raw, the 755 voraus-AD evidence records match the SAFEPROCESS
-records exactly.
+each dataset folder documents its files. **Status:** all products are built (86 MB) and validated.
+Rebuilt from raw, the 755 voraus-AD evidence records match the SAFEPROCESS records exactly.
 
-## Rebuild
-
-Python 3.10 or newer.
-
-```bash
-python -m pip install -r requirements.txt
-python pipeline/run_all.py --no-raw     # everything that needs no raw data
-python pipeline/run_all.py              # also the raw extraction steps, where the raw files are present
-python pipeline/run_all.py aursad       # one dataset
-```
-
-Each dataset's `raw/README.md` says which raw file it needs and where to put it. Without raw files every
-product is rebuilt from the committed intermediate tables; with them, the extraction steps run first
-(voraus-AD about 1 minute and 2.5 GB of memory, AURSAD about 1 minute, Paderborn about 5 minutes).
-`pipeline/validate.py` checks every dataset against its published counts, the split invariants and the
-knowledge-base structure, and every file against the GitHub size limit.
-
-## Layout
-
-```
-data/<dataset>/      derived data, documented in data/<dataset>/README.md (licences: data/LICENSE.md)
-pipeline/common/     shared code: refinement lattice, compact Parquet, checks
-pipeline/<dataset>/  build steps of one dataset (run.py, extract.py where raw data are needed,
-                     build.py, kb_spec.py with the authored knowledge base, validate.py)
-pipeline/voraus_ad/vendor/   the official voraus-AD enums and the knowledge base and evidence
-                     builder of the SAFEPROCESS study, unchanged
-```
+This repository holds data only. The processing code is kept by the authors and is not published;
+file descriptions that mention `pipeline/…` refer to it.
 
 ## Licence
 
-Code: MIT (`LICENSE`). Vendored code keeps its MIT licences (`pipeline/voraus_ad/vendor/LICENSE-*.txt`).
-Data: each folder keeps the licence of its source dataset — voraus-AD CC BY-NC-SA 4.0, AURSAD CC BY 4.0,
+Each folder keeps the licence of its source dataset — voraus-AD CC BY-NC-SA 4.0, AURSAD CC BY 4.0,
 UCI CC BY 4.0, Paderborn CC BY-NC 4.0 (`data/LICENSE.md`).
 
 ## Citations of the datasets
